@@ -1,26 +1,432 @@
-let cantidadCarrito = 0;
 
-function agregarCarrito(producto) {
+"use strict";
 
-    cantidadCarrito++;
+// ======================================
+// CUSTOM KNITS - CARRITO FUNCIONAL
+// Conserva el diseño original
+// ======================================
 
-    document.getElementById("contador").textContent = cantidadCarrito;
+const CLAVE_CARRITO = "customKnitsCarrito";
 
-    alert(producto + " agregado al carrito");
+const PRECIOS = {
+    "monedero tejido": 45000,
+    "vestido tejido": 200000,
+    "gorro tejido": 25000,
+    "mochila tejido": 125000
+};
+
+let carrito = cargarCarrito();
+
+function cargarCarrito() {
+    try {
+        const datos = JSON.parse(localStorage.getItem(CLAVE_CARRITO) || "[]");
+        if (!Array.isArray(datos)) return [];
+
+        return datos.filter(p =>
+            p &&
+            typeof p.nombre === "string" &&
+            Number.isFinite(p.precio) &&
+            Number.isInteger(p.cantidad) &&
+            p.cantidad > 0
+        );
+    } catch (error) {
+        return [];
+    }
 }
 
+function guardarCarrito() {
+    try {
+        localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
+    } catch (error) {
+        console.warn("No se pudo guardar el carrito.", error);
+    }
+}
+
+function formatoPrecio(valor) {
+    return new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0
+    }).format(valor);
+}
+
+// Actualizar el número junto al icono del carrito
+function actualizarContador() {
+    const contador = document.getElementById("contador");
+
+    if (contador) {
+        contador.textContent = carrito.reduce(
+            (total, producto) => total + producto.cantidad,
+            0
+        );
+    }
+}
+
+// Agregar un producto desde los botones originales del HTML
+function agregarCarrito(producto, precio) {
+    if (typeof producto !== "string" || !producto.trim()) {
+        alert("No se pudo identificar el producto.");
+        return;
+    }
+
+    const nombre = producto.trim();
+    const clave = nombre.toLowerCase();
+
+    // Si el botón no envía el precio, buscarlo automáticamente
+    const precioFinal = precio === undefined
+        ? PRECIOS[clave]
+        : Number(precio);
+
+    if (!Number.isFinite(precioFinal) || precioFinal < 0) {
+        alert("No se encontró un precio válido para " + nombre + ".");
+        return;
+    }
+
+    const existente = carrito.find(
+        p => p.nombre.toLowerCase() === clave
+    );
+
+    if (existente) {
+        existente.cantidad++;
+    } else {
+        carrito.push({
+            nombre: nombre,
+            precio: precioFinal,
+            cantidad: 1
+        });
+    }
+
+    guardarCarrito();
+    actualizarContador();
+
+    // Confirmación discreta, sin interrumpir la compra
+    mostrarAviso(nombre + " agregado al carrito");
+}
+
+// Aviso visual
+function mostrarAviso(texto) {
+    let aviso = document.getElementById("avisoCarrito");
+
+    if (!aviso) {
+        aviso = document.createElement("div");
+        aviso.id = "avisoCarrito";
+
+        Object.assign(aviso.style, {
+            position: "fixed",
+            bottom: "24px",
+            right: "24px",
+            zIndex: "10001",
+            background: "#694b45",
+            color: "#fff",
+            padding: "14px 22px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 16px #0003",
+            fontSize: "14px",
+            maxWidth: "calc(100% - 48px)"
+        });
+
+        document.body.appendChild(aviso);
+    }
+
+    aviso.textContent = "✓ " + texto;
+    aviso.style.display = "block";
+
+    clearTimeout(aviso._temporizador);
+    aviso._temporizador = setTimeout(() => {
+        aviso.style.display = "none";
+    }, 2200);
+}
+
+// Crear la ventana del carrito sin cambiar tu HTML original
+function crearVentanaCarrito() {
+    if (document.getElementById("ventanaCarrito")) return;
+
+    const ventana = document.createElement("div");
+    ventana.id = "ventanaCarrito";
+
+    Object.assign(ventana.style, {
+        display: "none",
+        position: "fixed",
+        inset: "0",
+        zIndex: "10000",
+        background: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "16px"
+    });
+
+    ventana.innerHTML = `
+        <div role="dialog" aria-modal="true"
+             aria-labelledby="tituloCarrito"
+             style="background:#fffaf7; color:#493631;
+             padding:24px; border-radius:14px; width:100%;
+             max-width:650px; max-height:85vh; overflow:auto;
+             box-sizing:border-box; font-family:Arial,sans-serif;">
+
+            <div style="display:flex; justify-content:space-between;
+                 align-items:center; gap:12px;">
+                <h2 id="tituloCarrito" style="margin:0;">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Tu carrito
+                </h2>
+                <button id="cerrarCarrito" type="button"
+                    aria-label="Cerrar carrito"
+                    style="border:0; background:none; font-size:26px;
+                    cursor:pointer; color:#694b45;">&times;</button>
+            </div>
+
+            <div id="listaCarrito" style="margin-top:20px;"></div>
+
+            <div id="totalCarrito"
+                 style="font-size:20px; font-weight:bold;
+                 text-align:right; margin-top:20px;"></div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;
+                 justify-content:flex-end; margin-top:20px;">
+                <button id="vaciarCarrito" type="button"
+                    style="border:1px solid #694b45; color:#694b45;
+                    background:transparent; padding:11px 16px;
+                    border-radius:8px; cursor:pointer;">
+                    Vaciar carrito
+                </button>
+                <button id="seguirComprando" type="button"
+                    style="border:0; color:white; background:#694b45;
+                    padding:11px 16px; border-radius:8px;
+                    cursor:pointer;">
+                    Seguir comprando
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(ventana);
+
+    document.getElementById("cerrarCarrito").addEventListener(
+        "click", cerrarVentanaCarrito
+    );
+
+    document.getElementById("seguirComprando").addEventListener(
+        "click", cerrarVentanaCarrito
+    );
+
+    ventana.addEventListener("click", evento => {
+        if (evento.target === ventana) cerrarVentanaCarrito();
+    });
+
+    document.getElementById("vaciarCarrito").addEventListener("click", () => {
+        if (carrito.length === 0) {
+            alert("Tu carrito ya está vacío.");
+            return;
+        }
+
+        if (confirm("¿Seguro que deseas vaciar el carrito?")) {
+            carrito = [];
+            guardarCarrito();
+            actualizarContador();
+            renderizarCarrito();
+        }
+    });
+
+    document.getElementById("listaCarrito").addEventListener(
+        "click", evento => {
+            const boton = evento.target.closest("button[data-accion]");
+            if (!boton) return;
+
+            const indice = Number(boton.dataset.indice);
+            const producto = carrito[indice];
+
+            if (!producto) return;
+
+            if (boton.dataset.accion === "sumar") {
+                producto.cantidad++;
+            } else if (boton.dataset.accion === "restar") {
+                producto.cantidad--;
+
+                if (producto.cantidad <= 0) {
+                    carrito.splice(indice, 1);
+                }
+            } else if (boton.dataset.accion === "eliminar") {
+                carrito.splice(indice, 1);
+            }
+
+            guardarCarrito();
+            actualizarContador();
+            renderizarCarrito();
+        }
+    );
+}
+
+function cerrarVentanaCarrito() {
+    const ventana = document.getElementById("ventanaCarrito");
+    if (ventana) ventana.style.display = "none";
+}
+
+function abrirCarrito() {
+    crearVentanaCarrito();
+    renderizarCarrito();
+
+    document.getElementById("ventanaCarrito").style.display = "flex";
+}
+
+function renderizarCarrito() {
+    const lista = document.getElementById("listaCarrito");
+    const totalElemento = document.getElementById("totalCarrito");
+
+    if (!lista || !totalElemento) return;
+
+    if (carrito.length === 0) {
+        lista.textContent = "Tu carrito está vacío. ¡Agrega tus productos favoritos!";
+        totalElemento.textContent = "Total: " + formatoPrecio(0);
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    carrito.forEach((producto, indice) => {
+        const fila = document.createElement("div");
+
+        Object.assign(fila.style, {
+            display: "grid",
+            gridTemplateColumns: "minmax(0,1fr) auto",
+            gap: "12px",
+            padding: "15px 0",
+            borderBottom: "1px solid #eadbd6"
+        });
+
+        const informacion = document.createElement("div");
+        const nombre = document.createElement("strong");
+        nombre.textContent = producto.nombre;
+
+        const precio = document.createElement("p");
+        precio.style.margin = "6px 0";
+        precio.textContent = formatoPrecio(producto.precio) + " por unidad";
+
+        const subtotal = document.createElement("p");
+        subtotal.style.margin = "6px 0";
+        subtotal.textContent =
+            "Subtotal: " + formatoPrecio(producto.precio * producto.cantidad);
+
+        informacion.append(nombre, precio, subtotal);
+
+        const controles = document.createElement("div");
+        controles.style.textAlign = "right";
+
+        const cantidad = document.createElement("p");
+        cantidad.textContent = "Cantidad: " + producto.cantidad;
+
+        const botones = document.createElement("div");
+        botones.style.display = "flex";
+        botones.style.gap = "5px";
+        botones.style.flexWrap = "wrap";
+        botones.style.justifyContent = "flex-end";
+
+        [
+            ["−", "restar"],
+            ["+", "sumar"],
+            ["Eliminar", "eliminar"]
+        ].forEach(([texto, accion]) => {
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.textContent = texto;
+            boton.dataset.accion = accion;
+            boton.dataset.indice = indice;
+
+            Object.assign(boton.style, {
+                border: "1px solid #d8b8ae",
+                borderRadius: "6px",
+                background: "#f4e7e1",
+                color: "#493631",
+                padding: "7px 10px",
+                cursor: "pointer"
+            });
+
+            botones.appendChild(boton);
+        });
+
+        controles.append(cantidad, botones);
+        fila.append(informacion, controles);
+        lista.appendChild(fila);
+    });
+
+    const total = carrito.reduce(
+        (suma, producto) => suma + producto.precio * producto.cantidad,
+        0
+    );
+
+    totalElemento.textContent = "Total: " + formatoPrecio(total);
+}
+
+// Funciones utilizadas por tu HTML original
+function obtenerCarrito() {
+    return carrito.map(producto => ({ ...producto }));
+}
+
+function calcularTotalCarrito() {
+    return carrito.reduce(
+        (total, producto) => total + producto.precio * producto.cantidad,
+        0
+    );
+}
+
+function vaciarCarrito() {
+    carrito = [];
+    guardarCarrito();
+    actualizarContador();
+    renderizarCarrito();
+}
 
 function verProductos() {
+    const productos = document.getElementById("productos");
 
-    document
-        .getElementById("productos")
-        .scrollIntoView({
-            behavior: "smooth"
+    if (productos) {
+        productos.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
         });
+    }
 }
-
 
 function solicitarPersonalizado() {
-
-    alert("Próximamente podrás realizar tu pedido personalizado.");
+    alert(
+        "¡Gracias por tu interés en Custom Knits! " +
+        "Próximamente podrás solicitar tus prendas personalizadas."
+    );
 }
+
+// Iniciar sin alterar las imágenes ni los estilos originales
+document.addEventListener("DOMContentLoaded", () => {
+    actualizarContador();
+    crearVentanaCarrito();
+
+    const iconoCarrito = document.querySelector(".carrito");
+
+    if (iconoCarrito) {
+        iconoCarrito.style.cursor = "pointer";
+        iconoCarrito.setAttribute("role", "button");
+        iconoCarrito.setAttribute("tabindex", "0");
+        iconoCarrito.setAttribute("aria-label", "Abrir carrito de compras");
+
+        iconoCarrito.addEventListener("click", abrirCarrito);
+
+        iconoCarrito.addEventListener("keydown", evento => {
+            if (evento.key === "Enter" || evento.key === " ") {
+                evento.preventDefault();
+                abrirCarrito();
+            }
+        });
+    }
+
+    // Funcionalidad de favoritos
+    document.querySelectorAll(".favorito").forEach(boton => {
+        boton.addEventListener("click", () => {
+            const icono = boton.querySelector("i");
+            if (!icono) return;
+
+            const activo = icono.classList.contains("fa-solid");
+
+            icono.classList.toggle("fa-solid", !activo);
+            icono.classList.toggle("fa-regular", activo);
+            boton.setAttribute("aria-pressed", String(!activo));
+        });
+    });
+});

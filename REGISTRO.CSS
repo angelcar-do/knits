@@ -1,13 +1,37 @@
+
+/* =========================================
+   CUSTOM KNITS - ESTILOS DE REGISTRO
+   ========================================= */
+
+:root {
+    --verde: #687653;
+    --verde-oscuro: #515e40;
+    --verde-claro: #87916b;
+    --fondo: #f3efe7;
+    --blanco: #fffefa;
+    --texto: #25251f;
+    --texto-secundario: #77776f;
+    --borde: #deded4;
+    --error: #b42318;
+    --exito: #287344;
+}
+
 * {
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     margin: 0;
     min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
-    color: #25251f;
-    background: linear-gradient(135deg, #f7f3ec, #e7e0d4);
+    color: var(--texto);
+    background:
+        radial-gradient(ellipse at top left, #ffffffb8, transparent 48%),
+        linear-gradient(135deg, #f7f3ec, #e7e0d4);
 }
 
 .registro-contenedor {
@@ -27,16 +51,22 @@ body {
     color: #555747;
     text-decoration: none;
     font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.volver:hover {
+    color: var(--verde-oscuro);
 }
 
 .registro-tarjeta {
     width: 100%;
     max-width: 440px;
     padding: 36px;
-    background: #fffefa;
+    background: var(--blanco);
     border: 1px solid #e8e2d7;
-    border-radius: 18px;
+    border-radius: 20px;
     box-shadow: 0 18px 50px #342b1914;
+    animation: aparecer 0.45s ease both;
 }
 
 .marca {
@@ -46,12 +76,13 @@ body {
 }
 
 .marca span {
-    color: #87916b;
+    color: var(--verde-claro);
 }
 
 .etiqueta {
     margin-top: 22px;
-    color: #87916b;
+    margin-bottom: 10px;
+    color: var(--verde-claro);
     font-size: 11px;
     font-weight: bold;
     letter-spacing: 2px;
@@ -60,16 +91,17 @@ body {
 h1 {
     margin: 8px 0;
     font-size: 30px;
+    line-height: 1.2;
 }
 
 .descripcion {
     margin-bottom: 25px;
-    color: #77776f;
+    color: var(--texto-secundario);
     font-size: 14px;
     line-height: 1.6;
 }
 
-form {
+#formRegistro {
     display: flex;
     flex-direction: column;
 }
@@ -82,80 +114,160 @@ label {
 
 input {
     width: 100%;
+    min-height: 46px;
     padding: 13px 14px;
-    border: 1px solid #deded4;
+    border: 1px solid var(--borde);
     border-radius: 9px;
     background: #fff;
+    color: var(--texto);
+    font-family: inherit;
     font-size: 14px;
     outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+input::placeholder {
+    color: #a2a197;
 }
 
 input:focus {
-    border-color: #87916b;
+    border-color: var(--verde-claro);
+    background: #fffefa;
     box-shadow: 0 0 0 3px #87916b20;
 }
 
+input:focus-visible {
+    outline: none;
+}
+
 button {
+    width: 100%;
+    min-height: 47px;
     margin-top: 24px;
     padding: 14px;
     border: 0;
     border-radius: 9px;
-    background: #687653;
+    background: var(--verde);
     color: white;
+    font-family: inherit;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
-    transition: background .2s;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-button:hover {
-    background: #515e40;
+button:hover:not(:disabled) {
+    background: var(--verde-oscuro);
+    box-shadow: 0 5px 15px #515e4026;
+    transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #87916b80;
+    outline-offset: 3px;
 }
 
 button:disabled {
-    opacity: .65;
+    opacity: 0.65;
     cursor: wait;
+    transform: none;
+    box-shadow: none;
 }
 
 #mensaje {
-    margin-bottom: 0;
+    min-height: 0;
+    margin: 12px 0 0;
     font-size: 13px;
     line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+#mensaje:empty {
+    display: none;
 }
 
 #mensaje.error {
-    color: #b42318;
+    color: var(--error);
 }
 
 #mensaje.exito {
-    color: #287344;
+    color: var(--exito);
 }
 
 .enlace-login {
     margin-top: 24px;
     text-align: center;
-    color: #77776f;
+    color: var(--texto-secundario);
     font-size: 13px;
+    line-height: 1.6;
 }
 
 .enlace-login a {
-    color: #687653;
+    color: var(--verde);
     font-weight: bold;
     text-decoration: none;
 }
 
+.enlace-login a:hover {
+    color: var(--verde-oscuro);
+    text-decoration: underline;
+}
+
 footer {
     margin-top: 22px;
-    color: #77776f;
+    color: var(--texto-secundario);
     font-size: 12px;
+    text-align: center;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 480px) {
+    .registro-contenedor {
+        padding: 22px 14px;
+    }
+
     .registro-tarjeta {
-        padding: 25px 20px;
+        padding: 27px 21px;
+        border-radius: 16px;
     }
 
     h1 {
         font-size: 26px;
+    }
+
+    .marca {
+        font-size: 21px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
