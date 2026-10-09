@@ -1,0 +1,7 @@
+
+# Archivos privados de Custom Knits
+/backend/config.local.php
+/backend/ca.pem
+/.env
+/.env.*
+!/.env.example
