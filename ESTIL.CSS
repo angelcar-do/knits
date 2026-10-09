@@ -1,18 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Montserrat:wght@400;500;600;700&display=swap');
 
 :root {
-    --color-principal: #a65f69;
-    --color-principal-oscuro: #824a52;
+    --color-morado: #6A0DAD;
+    --color-lila: #B784E7;
+    --color-lila-claro: #E8E1F5;
+    --color-amarillo: #D1D900;
+    --color-verde: #718900;
 
-    --color-verde: #1f2d2d;
-    --color-verde-claro: #344646;
-
-    --color-crema: #f8f5f1;
-    --color-beige: #eee7df;
-    --color-blanco: #ffffff;
-
-    --color-texto: #263238;
-    --color-borde: #e5dfd8;
+    --color-beige: #E8E1F5;
+    --color-fondo: #FFFFFF;
+    --color-texto: #30243A;
 }
 
 * {
@@ -137,7 +134,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-principal);
+    background: #6A0DAD;
     color: white;
     border-radius: 50%;
     font-size: 11px;
@@ -186,7 +183,7 @@ button {
     width: max-content;
     padding: 15px 28px;
     background: var(--color-principal);
-    color: white;
+    color:#6A0DAD;
     border-radius: 30px;
 }
 
@@ -349,6 +346,7 @@ button {
 
 .productos {
     padding: 60px 8%;
+    background:#E8E1F5 ;
 }
 
 .titulo-seccion {
@@ -459,11 +457,22 @@ button {
     font-weight: 600;
 }
 
-.info-producto button:hover {
-    background: var(--color-principal-oscuro);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(166, 95, 105, 0.25);
+.info-producto button {
+    width: 100%;
+    padding: 12px;
+    background: #6A0DAD;
+    color: white;
+    border-radius: 25px;
+    font-weight: 600;
 }
+
+.info-producto button:hover {
+    background: #718900;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(106, 13, 173, 0.25);
+}
+
 
 .personalizacion {
     padding: 50px 10%;
@@ -471,7 +480,7 @@ button {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     align-items: center;
-    background: var(--color-beige);
+    background: #FFFFFF;
 }
 
 .personalizacion-texto > p:first-child {
@@ -670,4 +679,31 @@ footer a:hover {
     .footer-contenido {
         grid-template-columns: 1fr;
     }
+}
+
+.hero-imagen {
+    position: relative;
+    overflow: hidden;
+    min-height: 430px;
+}
+
+.hero-imagen .hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.04);
+    transition:
+        opacity 1s ease,
+        transform 5s ease,
+        visibility 1s;
+}
+
+.hero-imagen .hero-slide.activo {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
 }
