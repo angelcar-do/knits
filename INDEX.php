@@ -6,7 +6,7 @@
 
     <title>Custom Knits</title>
 
-    <link rel="stylesheet" href="ESTIL.CSS">
+    <link rel="stylesheet" href="estil.css">
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -88,7 +88,7 @@
         class="hero-slide"
         muted
         playsinline
-        preload="metadata">
+        preload="auto">
         <source src="img/vdtejido.mp4" type="video/mp4">
     </video>
 
@@ -316,7 +316,7 @@
     </footer>
 
 
-    <script src="SCRIPT.JS"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>

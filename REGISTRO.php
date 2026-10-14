@@ -9,14 +9,14 @@
 
     <meta name="description" content="Crea tu cuenta en Custom Knits y descubre prendas hechas para ti.">
 
-    <link rel="stylesheet" href="REGISTRO.CSS">
-    <script src="REGISTRO.JS" defer></script>
+    <link rel="stylesheet" href="registro.css">
+    <script src="registro.js" defer></script>
 </head>
 
 <body>
     <main class="registro-contenedor">
 
-        <a class="volver" href="INDEX.HTML">
+        <a class="volver" href="index.php">
             ← Volver a la tienda
         </a>
 
@@ -92,7 +92,7 @@
 
             <p class="enlace-login">
                 ¿Ya tienes una cuenta?
-                <a href="LOGIN.PHP">Inicia sesión</a>
+                <a href="login.php">Inicia sesión</a>
             </p>
 
         </section>

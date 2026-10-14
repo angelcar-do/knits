@@ -365,11 +365,13 @@ input:focus-visible {
     color: var(--color-texto);
     border-radius: 15px;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
+    background-color: transparent;
+    transform: none;
+    transition: background-color 0.5s ease, transform 0.5s ease;
 }
 
 .categoria:hover {
-    background: var(--color-crema);
+    background-color: var(--color-crema);
     transform: translateY(-5px);
 }
 
@@ -380,15 +382,15 @@ input:focus-visible {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-beige);
+    background-color: var(--color-beige);
     color: var(--color-principal);
     border-radius: 50%;
     font-size: 23px;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .categoria:hover i {
-    background: var(--color-principal);
+    background-color: var(--color-lila-claro);
     color: white;
 }
 
@@ -400,6 +402,7 @@ input:focus-visible {
 
 .productos {
     padding: 65px 7%;
+    background: var(--color-lila-claro);
 }
 
 .titulo-seccion {
@@ -489,13 +492,13 @@ input:focus-visible {
 
 .favorito:hover {
     background: var(--color-principal);
-    color: white;
+    color: lightgreen;
     transform: scale(1.08);
 }
 
 .favorito[aria-pressed="true"] {
     background: var(--color-principal);
-    color: white;
+    color: lightgreen;
 }
 
 /* INFORMACIÓN DE PRODUCTOS */
@@ -543,12 +546,9 @@ input:focus-visible {
 
 .info-producto button:hover {
     background: #718900;
-    color: white;
+    color: green;
     transform: translateY(-2px);
     box-shadow: 0 8px 15px rgba(106, 13, 173, 0.25);
-}
-
-.info-producto button:hover {
     background: var(--color-principal-oscuro);
     transform: translateY(-2px);
     box-shadow: 0 6px 14px #a65f6930;
@@ -623,7 +623,7 @@ input:focus-visible {
 
 footer {
     padding: 50px 7% 20px;
-    background: var(--color-verde);
+    background: var(--color-morado);
     color: white;
 }
 
@@ -1074,4 +1074,41 @@ footer a:hover {
     opacity: 1;
     visibility: visible;
     transform: scale(1);
+}
+
+.hero-imagen {
+    position: relative;
+    min-width: 0;
+    min-height: 430px;
+    overflow: hidden;
+}
+
+.hero-imagen .hero-slide {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.7s ease;
+}
+
+.hero-imagen .hero-slide.activo {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 600px) {
+    .hero-imagen {
+        height: 280px;
+        min-height: 280px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-imagen .hero-slide {
+        transition: none;
+    }
 }

@@ -10,14 +10,15 @@
 
     <title>Iniciar sesión | Custom Knits</title>
 
-    <link rel="stylesheet" href="LOGIN.CSS">
-    <script src="LOGIN.JS" defer></script>
+    <link rel="stylesheet" href="login.css
+    ">
+    <script src="login.css" defer></script>
 </head>
 
 <body>
     <main class="contenedor">
 
-        <a class="volver" href="INDEX.HTML">
+        <a class="volver" href="index.php">
             ← Volver a la tienda
         </a>
 
@@ -76,7 +77,7 @@
 
             <p class="enlace">
                 ¿Todavía no tienes cuenta?
-                <a href="REGISTRO.PHP">Regístrate aquí</a>
+                <a href="registro.php">Regístrate aquí</a>
             </p>
 
         </section>

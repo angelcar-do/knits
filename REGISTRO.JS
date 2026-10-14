@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formulario.reset();
 
             setTimeout(() => {
-                window.location.href = "LOGIN.PHP";
+                window.location.href = "login.php";
             }, 1500);
 
         } catch (error) {

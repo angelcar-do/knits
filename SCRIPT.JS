@@ -1,11 +1,6 @@
 
 "use strict";
 
-// ======================================
-// CUSTOM KNITS - CARRITO FUNCIONAL
-// Conserva el diseño original
-// ======================================
-
 const CLAVE_CARRITO = "customKnitsCarrito";
 
 const PRECIOS = {
@@ -50,7 +45,6 @@ function formatoPrecio(valor) {
     }).format(valor);
 }
 
-// Actualizar el número junto al icono del carrito
 function actualizarContador() {
     const contador = document.getElementById("contador");
 
@@ -62,7 +56,6 @@ function actualizarContador() {
     }
 }
 
-// Agregar un producto desde los botones originales del HTML
 function agregarCarrito(producto, precio) {
     if (typeof producto !== "string" || !producto.trim()) {
         alert("No se pudo identificar el producto.");
@@ -72,7 +65,6 @@ function agregarCarrito(producto, precio) {
     const nombre = producto.trim();
     const clave = nombre.toLowerCase();
 
-    // Si el botón no envía el precio, buscarlo automáticamente
     const precioFinal = precio === undefined
         ? PRECIOS[clave]
         : Number(precio);
@@ -99,7 +91,6 @@ function agregarCarrito(producto, precio) {
     guardarCarrito();
     actualizarContador();
 
-    // Confirmación discreta, sin interrumpir la compra
     mostrarAviso(nombre + " agregado al carrito");
 }
 
@@ -137,7 +128,6 @@ function mostrarAviso(texto) {
     }, 2200);
 }
 
-// Crear la ventana del carrito sin cambiar tu HTML original
 function crearVentanaCarrito() {
     if (document.getElementById("ventanaCarrito")) return;
 
@@ -356,7 +346,6 @@ function renderizarCarrito() {
     totalElemento.textContent = "Total: " + formatoPrecio(total);
 }
 
-// Funciones utilizadas por tu HTML original
 function obtenerCarrito() {
     return carrito.map(producto => ({ ...producto }));
 }
@@ -393,11 +382,8 @@ function solicitarPersonalizado() {
     );
 }
 
-<<<<<<< HEAD
     alert("Próximamente podrás realizar tu pedido personalizado.");
-}
 
-// Carrusel automático de la imagen principal
 document.addEventListener("DOMContentLoaded", () => {
     const slides = document.querySelectorAll(
         ".hero-imagen .hero-slide"
@@ -406,104 +392,83 @@ document.addEventListener("DOMContentLoaded", () => {
     if (slides.length === 0) return;
 
     let actual = 0;
-    let temporizador;
+    let temporizador = null;
 
-    function mostrarSiguiente() {
-        const anterior = slides[actual];
+    const DURACION_IMAGEN = 5000;
 
-        anterior.classList.remove("activo");
-
-        if (anterior.tagName === "VIDEO") {
-            anterior.pause();
-            anterior.currentTime = 0;
-        }
-
-        actual = (actual + 1) % slides.length;
-
-        const siguiente = slides[actual];
-        siguiente.classList.add("activo");
-
-        if (siguiente.tagName === "VIDEO") {
-            siguiente.currentTime = 0;
-
-            const reproduccion = siguiente.play();
-
-            if (reproduccion) {
-                reproduccion.catch(() => {});
-            }
-        }
-
-        programarSiguiente();
-    }
-
-    function programarSiguiente() {
-        clearTimeout(temporizador);
-
-        const slide = slides[actual];
-
-        if (slide.tagName === "VIDEO") {
-            if (slide.readyState >= 1) {
-                temporizador = setTimeout(
-                    mostrarSiguiente,
-                    Math.max(1000, slide.duration * 1000)
-                );
-            } else {
-                temporizador = setTimeout(
-                    mostrarSiguiente,
-                    10000
-                );
-            }
-        } else {
-            temporizador = setTimeout(
-                mostrarSiguiente,
-                5000
-            );
+    function limpiarTemporizador() {
+        if (temporizador !== null) {
+            clearTimeout(temporizador);
+            temporizador = null;
         }
     }
 
-    slides.forEach((slide, indice) => {
-        if (indice !== 0) {
+    function mostrarSlide(indice) {
+        limpiarTemporizador();
+
+        slides.forEach(slide => {
             slide.classList.remove("activo");
-        }
-    });
 
-    programarSiguiente();
-=======
-// Iniciar sin alterar las imágenes ni los estilos originales
-document.addEventListener("DOMContentLoaded", () => {
-    actualizarContador();
-    crearVentanaCarrito();
-
-    const iconoCarrito = document.querySelector(".carrito");
-
-    if (iconoCarrito) {
-        iconoCarrito.style.cursor = "pointer";
-        iconoCarrito.setAttribute("role", "button");
-        iconoCarrito.setAttribute("tabindex", "0");
-        iconoCarrito.setAttribute("aria-label", "Abrir carrito de compras");
-
-        iconoCarrito.addEventListener("click", abrirCarrito);
-
-        iconoCarrito.addEventListener("keydown", evento => {
-            if (evento.key === "Enter" || evento.key === " ") {
-                evento.preventDefault();
-                abrirCarrito();
+            if (slide.tagName === "VIDEO") {
+                slide.pause();
+                slide.onended = null;
+                slide.onerror = null;
             }
         });
+
+        actual = indice;
+        const slideActual = slides[actual];
+
+        slideActual.classList.add("activo");
+
+
+        if (slideActual.tagName !== "VIDEO") {
+            temporizador = setTimeout(() => {
+                siguienteSlide();
+            }, DURACION_IMAGEN);
+
+            return;
+        }
+
+        slideActual.muted = true;
+        slideActual.playsInline = true;
+        slideActual.currentTime = 0;
+
+        slideActual.onended = () => {
+            siguienteSlide();
+        };
+
+        slideActual.onerror = () => {
+            console.error(
+                "No se pudo cargar el video:",
+                slideActual.querySelector("source")?.src
+            );
+
+            siguienteSlide();
+        };
+
+        const reproduccion = slideActual.play();
+
+        if (reproduccion !== undefined) {
+            reproduccion.catch(error => {
+                console.error(
+                    "No se pudo reproducir el video:",
+                    error
+                );
+
+                if (slideActual.classList.contains("activo")) {
+                    temporizador = setTimeout(() => {
+                        siguienteSlide();
+                    }, DURACION_IMAGEN);
+                }
+            });
+        }
     }
 
-    // Funcionalidad de favoritos
-    document.querySelectorAll(".favorito").forEach(boton => {
-        boton.addEventListener("click", () => {
-            const icono = boton.querySelector("i");
-            if (!icono) return;
+    function siguienteSlide() {
+        const siguiente = (actual + 1) % slides.length;
+        mostrarSlide(siguiente);
+    }
 
-            const activo = icono.classList.contains("fa-solid");
-
-            icono.classList.toggle("fa-solid", !activo);
-            icono.classList.toggle("fa-regular", activo);
-            boton.setAttribute("aria-pressed", String(!activo));
-        });
-    });
->>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
+    mostrarSlide(0);
 });

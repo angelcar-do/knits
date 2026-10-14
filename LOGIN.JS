@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const campoCorreo = document.getElementById("correo");
     const campoContrasena = document.getElementById("contrasena");
 
-    // Verificar que existan los elementos del formulario.
     if (!formulario || !mensaje || !boton ||
         !campoCorreo || !campoContrasena) {
         console.error("No se encontraron los elementos del formulario de inicio de sesión.");
@@ -67,11 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
             mensaje.textContent = "¡Bienvenido a Custom Knits!";
             mensaje.className = "exito";
 
-            // Evitar que se envíe nuevamente el formulario.
             boton.textContent = "Sesión iniciada";
 
             window.setTimeout(() => {
-                window.location.href = "INDEX.HTML";
+                window.location.href = "index.php";
             }, 1000);
 
         } catch (error) {
