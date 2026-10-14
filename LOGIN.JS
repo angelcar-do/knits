@@ -1,46 +1,91 @@
-const formulario = document.getElementById("formLogin");
-const mensaje = document.getElementById("mensaje");
-const boton = document.getElementById("btnLogin");
 
-formulario.addEventListener("submit", async (evento) => {
-    evento.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const formulario = document.getElementById("formLogin");
+    const mensaje = document.getElementById("mensaje");
+    const boton = document.getElementById("btnLogin");
+    const campoCorreo = document.getElementById("correo");
+    const campoContrasena = document.getElementById("contrasena");
 
-    const correo = document.getElementById("correo").value.trim();
-    const contrasena = document.getElementById("contrasena").value;
+    // Verificar que existan los elementos del formulario.
+    if (!formulario || !mensaje || !boton ||
+        !campoCorreo || !campoContrasena) {
+        console.error("No se encontraron los elementos del formulario de inicio de sesión.");
+        return;
+    }
 
-    mensaje.textContent = "";
-    mensaje.className = "";
-    boton.disabled = true;
-    boton.textContent = "Verificando...";
+    formulario.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
 
-    try {
-        const respuesta = await fetch("backend/usuarios/login.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin",
-            body: JSON.stringify({ correo, contrasena })
-        });
+        const correo = campoCorreo.value.trim().toLowerCase();
+        const contrasena = campoContrasena.value;
 
-        const datos = await respuesta.json();
+        mensaje.textContent = "";
+        mensaje.className = "";
 
-        if (!respuesta.ok || !datos.ok) {
-            throw new Error(datos.mensaje || "No se pudo iniciar sesión.");
+        if (!correo || !contrasena) {
+            mensaje.textContent = "Completa todos los campos.";
+            mensaje.className = "error";
+            return;
         }
 
-        mensaje.textContent = "¡Bienvenido a Custom Knits!";
-        mensaje.className = "exito";
+        boton.disabled = true;
+        boton.textContent = "Verificando...";
 
-        setTimeout(() => {
-            window.location.href = "INDEX.HTML";
-        }, 1000);
+        try {
+            const respuesta = await fetch(
+                "backend/usuarios/login.php",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    credentials: "same-origin",
+                    body: JSON.stringify({
+                        correo: correo,
+                        contrasena: contrasena
+                    })
+                }
+            );
 
-    } catch (error) {
-        mensaje.textContent = error.message === "Failed to fetch"
-            ? "No se pudo conectar con el servidor PHP."
-            : error.message;
-        mensaje.className = "error";
-    } finally {
-        boton.disabled = false;
-        boton.textContent = "Iniciar sesión";
-    }
+            let datos;
+
+            try {
+                datos = await respuesta.json();
+            } catch {
+                throw new Error(
+                    "El servidor devolvió una respuesta inválida. Verifica el backend."
+                );
+            }
+
+            if (!respuesta.ok || !datos.ok) {
+                throw new Error(
+                    datos.mensaje || "No se pudo iniciar sesión."
+                );
+            }
+
+            mensaje.textContent = "¡Bienvenido a Custom Knits!";
+            mensaje.className = "exito";
+
+            // Evitar que se envíe nuevamente el formulario.
+            boton.textContent = "Sesión iniciada";
+
+            window.setTimeout(() => {
+                window.location.href = "INDEX.HTML";
+            }, 1000);
+
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+
+            mensaje.textContent =
+                error.message === "Failed to fetch"
+                    ? "No se pudo conectar con el servidor. Abre la página desde PHP."
+                    : error.message;
+
+            mensaje.className = "error";
+
+            boton.disabled = false;
+            boton.textContent = "Iniciar sesión";
+        }
+    });
 });

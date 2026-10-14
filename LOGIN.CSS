@@ -1,23 +1,56 @@
+
+
+:root {
+    --color-fondo: #f4f0e8;
+    --color-tarjeta: #fffefa;
+    --color-principal: #687653;
+    --color-principal-hover: #515e40;
+    --color-secundario: #87916b;
+    --color-texto: #25251f;
+    --color-texto-suave: #77776f;
+    --color-borde: #e5dfd3;
+    --color-error: #b42318;
+    --color-exito: #287344;
+}
+
 * {
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     margin: 0;
     min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
-    color: #25251f;
-    background: linear-gradient(135deg, #f7f3ec, #e7e0d4);
+    color: var(--color-texto);
+    background:
+        radial-gradient(
+            circle at top left,
+            #ffffffb8,
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            var(--color-fondo),
+            #e5ddcf
+        );
 }
+
+/* CONTENEDOR PRINCIPAL */
 
 .contenedor {
     min-height: 100vh;
-    padding: 28px 18px;
+    padding: 32px 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
+/* ENLACE PARA VOLVER */
 
 .volver {
     width: 100%;
@@ -26,17 +59,35 @@ body {
     color: #555747;
     text-decoration: none;
     font-size: 14px;
+    transition: color 0.2s ease;
 }
+
+.volver:hover {
+    color: var(--color-principal);
+}
+
+/* TARJETA DE LOGIN */
 
 .tarjeta {
     width: 100%;
     max-width: 440px;
+<<<<<<< HEAD
     padding: 36px;
     background: #E8E1F5;
     border: 1px solid #e8e2d7;
     border-radius: 18px;
     box-shadow: 0 18px 50px #342b1914;
+=======
+    padding: 38px;
+    background: var(--color-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-radius: 20px;
+    box-shadow: 0 22px 60px #342b1914;
+    animation: aparecer 0.5s ease both;
+>>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
 }
+
+/* LOGOTIPO */
 
 .marca {
     font-size: 23px;
@@ -45,28 +96,34 @@ body {
 }
 
 .marca span {
-    color: #87916b;
+    color: var(--color-secundario);
 }
 
+/* TEXTOS */
+
 .etiqueta {
-    margin-top: 22px;
-    color: #87916b;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: var(--color-secundario);
     font-size: 11px;
     font-weight: bold;
     letter-spacing: 2px;
 }
 
 h1 {
-    margin: 8px 0;
+    margin: 8px 0 12px;
     font-size: 30px;
+    line-height: 1.2;
 }
 
 .descripcion {
-    margin-bottom: 25px;
-    color: #77776f;
+    margin-bottom: 27px;
+    color: var(--color-texto-suave);
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.7;
 }
+
+/* FORMULARIO */
 
 form {
     display: flex;
@@ -74,80 +131,199 @@ form {
 }
 
 label {
-    margin: 15px 0 7px;
+    margin: 15px 0 8px;
     font-size: 13px;
     font-weight: bold;
 }
 
 input {
     width: 100%;
+    min-height: 46px;
     padding: 13px 14px;
     border: 1px solid #deded4;
-    border-radius: 9px;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--color-texto);
+    font-family: inherit;
     font-size: 14px;
     outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+input::placeholder {
+    color: #a4a49b;
+}
+
+input:hover {
+    border-color: #b8bea9;
 }
 
 input:focus {
-    border-color: #87916b;
-    box-shadow: 0 0 0 3px #87916b20;
+    border-color: var(--color-principal);
+    background: #fffefa;
+    box-shadow: 0 0 0 4px #87916b20;
 }
 
+/* BOTÓN DE INICIO DE SESIÓN */
+
 button {
-    margin-top: 24px;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 26px;
     padding: 14px;
+<<<<<<< HEAD
     border: 0;
     border-radius: 9px;
     background: #6A0DAD;
     color: white;
+=======
+    border: none;
+    border-radius: 10px;
+    background: var(--color-principal);
+    color: #fff;
+    font-family: inherit;
+>>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
+    box-shadow: 0 5px 12px #68765320;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
+<<<<<<< HEAD
 button:hover {
     background: #6A0DAD;
+=======
+button:hover:not(:disabled) {
+    background: var(--color-principal-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px #68765330;
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #87916b80;
+    outline-offset: 3px;
+>>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
 }
 
 button:disabled {
-    opacity: .65;
+    opacity: 0.7;
     cursor: wait;
+    box-shadow: none;
 }
 
+/* MENSAJES DEL FORMULARIO */
+
 #mensaje {
+    min-height: 0;
+    margin: 12px 0 0;
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+#mensaje:empty {
+    display: none;
 }
 
 #mensaje.error {
-    color: #b42318;
+    color: var(--color-error);
 }
 
 #mensaje.exito {
-    color: #287344;
+    color: var(--color-exito);
 }
 
+/* ENLACE AL REGISTRO */
+
 .enlace {
-    margin-top: 24px;
+    margin-top: 25px;
+    margin-bottom: 0;
     text-align: center;
-    color: #77776f;
+    color: var(--color-texto-suave);
     font-size: 13px;
+    line-height: 1.7;
 }
 
 .enlace a {
-    color: #687653;
+    color: var(--color-principal);
     font-weight: bold;
     text-decoration: none;
+    transition: color 0.2s ease;
 }
+
+.enlace a:hover {
+    color: var(--color-principal-hover);
+    text-decoration: underline;
+}
+
+/* PIE DE PÁGINA */
 
 footer {
-    margin-top: 22px;
-    color: #77776f;
+    margin-top: 24px;
+    color: var(--color-texto-suave);
     font-size: 12px;
+    text-align: center;
 }
 
+/* ANIMACIÓN DE ENTRADA */
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ADAPTACIÓN A CELULARES */
+
 @media (max-width: 480px) {
+    .contenedor {
+        padding: 24px 15px;
+    }
+
     .tarjeta {
-        padding: 25px 20px;
+        padding: 27px 21px;
+        border-radius: 16px;
+    }
+
+    .marca {
+        font-size: 21px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .descripcion {
+        font-size: 13px;
+    }
+}
+
+/* RESPETAR PREFERENCIAS DE ANIMACIÓN */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
