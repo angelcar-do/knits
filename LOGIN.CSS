@@ -39,8 +39,6 @@ body {
         );
 }
 
-/* CONTENEDOR PRINCIPAL */
-
 .contenedor {
     min-height: 100vh;
     padding: 32px 18px;
@@ -50,7 +48,6 @@ body {
     justify-content: center;
 }
 
-/* ENLACE PARA VOLVER */
 
 .volver {
     width: 100%;
@@ -66,28 +63,15 @@ body {
     color: var(--color-principal);
 }
 
-/* TARJETA DE LOGIN */
-
 .tarjeta {
     width: 100%;
     max-width: 440px;
-<<<<<<< HEAD
     padding: 36px;
     background: #E8E1F5;
     border: 1px solid #e8e2d7;
     border-radius: 18px;
     box-shadow: 0 18px 50px #342b1914;
-=======
-    padding: 38px;
-    background: var(--color-tarjeta);
-    border: 1px solid var(--color-borde);
-    border-radius: 20px;
-    box-shadow: 0 22px 60px #342b1914;
-    animation: aparecer 0.5s ease both;
->>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
 }
-
-/* LOGOTIPO */
 
 .marca {
     font-size: 23px;
@@ -122,8 +106,6 @@ h1 {
     font-size: 14px;
     line-height: 1.7;
 }
-
-/* FORMULARIO */
 
 form {
     display: flex;
@@ -198,8 +180,6 @@ button:disabled {
     box-shadow: none;
 }
 
-/* MENSAJES DEL FORMULARIO */
-
 #mensaje {
     min-height: 0;
     margin: 12px 0 0;
@@ -219,8 +199,6 @@ button:disabled {
 #mensaje.exito {
     color: var(--color-exito);
 }
-
-/* ENLACE AL REGISTRO */
 
 .enlace {
     margin-top: 25px;
@@ -243,16 +221,12 @@ button:disabled {
     text-decoration: underline;
 }
 
-/* PIE DE PÁGINA */
-
 footer {
     margin-top: 24px;
     color: var(--color-texto-suave);
     font-size: 12px;
     text-align: center;
 }
-
-/* ANIMACIÓN DE ENTRADA */
 
 @keyframes aparecer {
     from {
@@ -265,8 +239,6 @@ footer {
         transform: translateY(0);
     }
 }
-
-/* ADAPTACIÓN A CELULARES */
 
 @media (max-width: 480px) {
     .contenedor {
@@ -290,8 +262,6 @@ footer {
         font-size: 13px;
     }
 }
-
-/* RESPETAR PREFERENCIAS DE ANIMACIÓN */
 
 @media (prefers-reduced-motion: reduce) {
     *,

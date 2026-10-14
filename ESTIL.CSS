@@ -52,9 +52,6 @@ input:focus-visible {
     outline-offset: 3px;
 }
 
-/* =========================
-   ENCABEZADO
-   ========================= */
 
 .header {
     width: 100%;
@@ -106,8 +103,6 @@ input:focus-visible {
     letter-spacing: 3px;
 }
 
-/* MENÚ */
-
 .menu {
     display: flex;
     align-items: center;
@@ -144,8 +139,6 @@ input:focus-visible {
 .menu a.activo::after {
     width: 100%;
 }
-
-/* ICONOS Y ACCESO A CUENTA */
 
 .iconos {
     display: flex;
@@ -186,8 +179,6 @@ input:focus-visible {
     color: var(--color-principal);
 }
 
-/* CARRITO */
-
 .carrito {
     position: relative;
     width: 38px;
@@ -223,10 +214,6 @@ input:focus-visible {
     font-size: 10px;
     font-weight: 700;
 }
-
-/* =========================
-   PORTADA PRINCIPAL
-   ========================= */
 
 .hero {
     min-height: 430px;
@@ -304,8 +291,6 @@ input:focus-visible {
     animation: entradaImagen 1.2s ease both;
 }
 
-/* ANIMACIONES */
-
 @keyframes entradaTexto {
     from {
         opacity: 0;
@@ -357,10 +342,6 @@ input:focus-visible {
 .hero-texto button {
     animation: entradaTexto 0.8s ease 0.55s both;
 }
-
-/* =========================
-   CATEGORÍAS
-   ========================= */
 
 .categorias {
     padding: 35px 7%;
@@ -489,8 +470,6 @@ input:focus-visible {
 .producto:hover .imagen-producto img {
     transform: scale(1.05);
 }
-
-/* FAVORITOS */
 
 .favorito {
     position: absolute;
@@ -628,10 +607,6 @@ input:focus-visible {
     transform: translateY(10px);
 }
 
-/* =========================
-   SOBRE NOSOTROS
-   ========================= */
-
 .sobre-nosotros {
     padding: 65px 10%;
     text-align: center;
@@ -645,10 +620,6 @@ input:focus-visible {
     font-size: 13px;
     line-height: 1.9;
 }
-
-/* =========================
-   PIE DE PÁGINA
-   ========================= */
 
 footer {
     padding: 50px 7% 20px;
@@ -753,10 +724,6 @@ footer a:hover {
     font-size: 10px;
 }
 
-/* =========================
-   TABLET
-   ========================= */
-
 @media (max-width: 1150px) {
     .header {
         padding: 15px 3%;
@@ -854,10 +821,6 @@ footer a:hover {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
-
-/* =========================
-   CELULARES
-   ========================= */
 
 @media (max-width: 600px) {
     html {
