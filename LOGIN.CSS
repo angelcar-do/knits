@@ -174,18 +174,10 @@ button {
     min-height: 48px;
     margin-top: 26px;
     padding: 14px;
-<<<<<<< HEAD
     border: 0;
     border-radius: 9px;
     background: #6A0DAD;
     color: white;
-=======
-    border: none;
-    border-radius: 10px;
-    background: var(--color-principal);
-    color: #fff;
-    font-family: inherit;
->>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
@@ -196,25 +188,8 @@ button {
         box-shadow 0.2s ease;
 }
 
-<<<<<<< HEAD
 button:hover {
     background: #6A0DAD;
-=======
-button:hover:not(:disabled) {
-    background: var(--color-principal-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 18px #68765330;
-}
-
-button:active:not(:disabled) {
-    transform: translateY(0);
-}
-
-button:focus-visible,
-a:focus-visible {
-    outline: 3px solid #87916b80;
-    outline-offset: 3px;
->>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
 }
 
 button:disabled {

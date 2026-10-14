@@ -62,11 +62,7 @@ body {
     width: 100%;
     max-width: 440px;
     padding: 36px;
-<<<<<<< HEAD
     background: #E8E1F5;
-=======
-    background: var(--blanco);
->>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
     border: 1px solid #e8e2d7;
     border-radius: 20px;
     box-shadow: 0 18px 50px #342b1914;
@@ -154,11 +150,7 @@ button {
     padding: 14px;
     border: 0;
     border-radius: 9px;
-<<<<<<< HEAD
     background: #6A0DAD;
-=======
-    background: var(--verde);
->>>>>>> 8a8ba3ab073776912dcf6608bbffffb66a55d126
     color: white;
     font-family: inherit;
     font-size: 15px;
