@@ -17,7 +17,7 @@
     <header class="header">
 
         <div class="logo">
-            <i class="fa-solid fa-yarn"></i>
+            <img src="img/logo.jpg" alt="Logo Custom Knits">
             <div>
                 <h1>Custom Knits</h1>
                 <span>TEJIDOS CON AMOR</span>
@@ -270,11 +270,29 @@
 
 
 
+    <section class="sobre-nosotros" id="nosotros">
+
+        <div class="titulo-seccion">
+            <span></span>
+            <h2>Sobre nosotros</h2>
+            <span></span>
+        </div>
+
+        <p>
+            En Custom Knits tejemos cada prenda a mano, con cariño y atención
+            al detalle. Desde Cartagena creamos piezas únicas, pensadas para
+            ti y hechas a tu medida.
+        </p>
+
+    </section>
+
+
     <footer id="contacto">
 
         <div class="footer-contenido">
 
             <div class="footer-logo">
+                <img src="img/logo.jpg" alt="Logo Custom Knits">
                 <h2>Custom Knits</h2>
                 <p>TEJIDOS CON AMOR</p>
             </div>
