@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="login.css
     ">
-    <script src="login.css" defer></script>
+    <link rel="stylesheet" href="login.css">
 </head>
 
 <body>
@@ -87,5 +87,6 @@
         </footer>
 
     </main>
+<script src="login.js" defer></script>
 </body>
 </html>
