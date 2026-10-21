@@ -45,10 +45,11 @@ if (!isset($_SESSION['usuario'])) {
             <i class="fa-solid fa-magnifying-glass"></i>
             <i class="fa-regular fa-user"></i>
 
-            <div class="carrito">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span id="contador">0</span>
-            </div>
+            <div class="carrito" onclick="abrirCarrito()" role="button" tabindex="0"
+     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCarrito();}">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span id="contador">0</span>
+</div>
         </div>
 
     </header>
@@ -154,7 +155,8 @@ if (!isset($_SESSION['usuario'])) {
         </p>
 
 
-        <div class="productos-grid">
+        <div class="productos-grid" id="productosGrid">
+    <p>Cargando productos...</p>
 
     
             <article class="producto">
@@ -192,50 +194,6 @@ if (!isset($_SESSION['usuario'])) {
                     <p class="precio">$200.000</p>
 
                     <button onclick="agregarCarrito('Vestido tejido')">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        Agregar al carrito
-                    </button>
-                </div>
-
-            </article>
-
-
-            <article class="producto">
-
-                <div class="imagen-producto">
-                    <img src="img/gorro.jpg" alt="Gorro tejido">
-                    <button class="favorito">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                </div>
-
-                <div class="info-producto">
-                    <h3>Gorro tejido</h3>
-                    <p class="precio">$25.000</p>
-
-                    <button onclick="agregarCarrito('Gorro tejido')">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        Agregar al carrito
-                    </button>
-                </div>
-
-            </article>
-
-
-            <article class="producto">
-
-                <div class="imagen-producto">
-                    <img src="img/mochila.jpg" alt="Mochila tejido">
-                    <button class="favorito">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                </div>
-
-                <div class="info-producto">
-                    <h3>Mochila tejida</h3>
-                    <p class="precio">$125.000</p>
-
-                    <button onclick="agregarCarrito('Mochila tejido')">
                         <i class="fa-solid fa-cart-shopping"></i>
                         Agregar al carrito
                     </button>
