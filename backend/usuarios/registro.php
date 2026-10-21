@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+require_once __DIR__ . '/../config/sesion.php';
+
 header('Content-Type: application/json; charset=utf-8');
 
 function responder(int $status, array $data): never {
@@ -48,7 +49,25 @@ try {
 
     responder(201, ['ok' => true, 'mensaje' => 'Cuenta creada correctamente.']);
 
+
+} catch (MongoDB\Driver\Exception\BulkWriteException $e) {
+    if ($e->getCode() === 11000) {
+        responder(409, [
+            'ok' => false,
+            'mensaje' => 'Este correo ya está registrado.'
+        ]);
+    }
+
+    error_log('Registro KNITS: ' . $e->getMessage());
+    responder(500, [
+        'ok' => false,
+        'mensaje' => 'No se pudo crear la cuenta. Inténtalo más tarde.'
+    ]);
+
 } catch (Throwable $e) {
     error_log('Registro KNITS: ' . $e->getMessage());
-    responder(500, ['ok' => false, 'mensaje' => 'No se pudo crear la cuenta. Inténtalo más tarde.']);
+    responder(500, [
+        'ok' => false,
+        'mensaje' => 'No se pudo crear la cuenta. Inténtalo más tarde.'
+    ]);
 }

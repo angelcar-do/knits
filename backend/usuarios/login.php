@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+require_once __DIR__ . '/../config/sesion.php';
+
 header('Content-Type: application/json; charset=utf-8');
 
 function responder(int $status, array $data): never {
