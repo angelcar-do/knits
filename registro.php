@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,15 +9,15 @@
 
     <meta name="description" content="Crea tu cuenta en Custom Knits y descubre prendas hechas para ti.">
 
-    <link rel="stylesheet" href="registro.css">
-    <script src="registro.js" defer></script>
+    <link rel="stylesheet" href="frontend/css/registro.css">
+    <script src="frontend/js/registro.js" defer></script>
 </head>
 
 <body>
     <main class="registro-contenedor">
 
         <a class="volver" href="index.php">
-            ← Volver a la tienda
+            â† Volver a la tienda
         </a>
 
         <section class="registro-tarjeta">
@@ -29,7 +29,7 @@
             <h1>Crea tu cuenta</h1>
 
             <p class="descripcion">
-                Regístrate y descubre prendas hechas para ti.
+                RegÃ­strate y descubre prendas hechas para ti.
             </p>
 
             <form id="formRegistro" autocomplete="on">
@@ -45,7 +45,7 @@
                     required
                 >
 
-                <label for="correo">Correo electrónico</label>
+                <label for="correo">Correo electrÃ³nico</label>
                 <input
                     id="correo"
                     name="correo"
@@ -56,23 +56,23 @@
                     required
                 >
 
-                <label for="contrasena">Contraseña</label>
+                <label for="contrasena">ContraseÃ±a</label>
                 <input
                     id="contrasena"
                     name="contrasena"
                     type="password"
-                    placeholder="Mínimo 8 caracteres"
+                    placeholder="MÃ­nimo 8 caracteres"
                     minlength="8"
                     autocomplete="new-password"
                     required
                 >
 
-                <label for="confirmar">Confirmar contraseña</label>
+                <label for="confirmar">Confirmar contraseÃ±a</label>
                 <input
                     id="confirmar"
                     name="confirmar"
                     type="password"
-                    placeholder="Repite tu contraseña"
+                    placeholder="Repite tu contraseÃ±a"
                     minlength="8"
                     autocomplete="new-password"
                     required
@@ -91,14 +91,14 @@
             </form>
 
             <p class="enlace-login">
-                ¿Ya tienes una cuenta?
-                <a href="login.php">Inicia sesión</a>
+                Â¿Ya tienes una cuenta?
+                <a href="login.php">Inicia sesiÃ³n</a>
             </p>
 
         </section>
 
         <footer>
-            © 2026 Custom Knits · Diseñado para ti
+            Â© 2026 Custom Knits Â· DiseÃ±ado para ti
         </footer>
 
     </main>

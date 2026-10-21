@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuario'])) {
 
     <title>Custom Knits</title>
 
-    <link rel="stylesheet" href="estil.css">
+    <link rel="stylesheet" href="frontend/css/estil.css">
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -39,7 +39,7 @@ if (!isset($_SESSION['usuario'])) {
             <a href="#nosotros">Sobre nosotros</a>
             <a href="#contacto">Contacto</a>
         </nav>
-        <a href="backend/usuarios/logout.php">Cerrar sesión</a>
+        <a href="backend/usuarios/logout.php">Cerrar sesiÃ³n</a>
 
         <div class="iconos">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -69,9 +69,9 @@ if (!isset($_SESSION['usuario'])) {
             </h2>
 
             <p>
-                Descubre nuestra colección de prendas y accesorios tejidos
-                con amor, diseñados para brindarte comodidad, estilo y un
-                toque único.
+                Descubre nuestra colecciÃ³n de prendas y accesorios tejidos
+                con amor, diseÃ±ados para brindarte comodidad, estilo y un
+                toque Ãºnico.
             </p>
 
             <button onclick="verProductos()">
@@ -110,7 +110,7 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="categoria">
             <i class="fa-solid fa-shirt"></i>
-            <p>Suéteres</p>
+            <p>SuÃ©teres</p>
         </div>
 
         <div class="categoria">
@@ -130,7 +130,7 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="categoria">
             <i class="fa-solid fa-child-reaching"></i>
-            <p>Ropa para bebé</p>
+            <p>Ropa para bebÃ©</p>
         </div>
 
         <div class="categoria">
@@ -150,7 +150,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <p class="subtitulo">
-            Diseños únicos, hechos para ti
+            DiseÃ±os Ãºnicos, hechos para ti
         </p>
 
 
@@ -160,7 +160,7 @@ if (!isset($_SESSION['usuario'])) {
             <article class="producto">
 
                 <div class="imagen-producto">
-                    <img src="img/monedero.jpg" alt="Suéter tejido">
+                    <img src="img/monedero.jpg" alt="SuÃ©ter tejido">
                     <button class="favorito">
                         <i class="fa-regular fa-heart"></i>
                     </button>
@@ -252,13 +252,13 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="personalizacion-texto">
 
-            <p>HAZLO ÚNICO</p>
+            <p>HAZLO ÃšNICO</p>
 
             <h2>Personaliza tu pedido</h2>
 
             <p>
-                Elige colores, diseños y tallas.
-                Creamos la prenda perfecta según tus gustos y necesidades.
+                Elige colores, diseÃ±os y tallas.
+                Creamos la prenda perfecta segÃºn tus gustos y necesidades.
             </p>
 
             <button onclick="solicitarPersonalizado()">
@@ -288,8 +288,8 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <p>
-            En Custom Knits tejemos cada prenda a mano, con cariño y atención
-            al detalle. Desde Cartagena creamos piezas únicas, pensadas para
+            En Custom Knits tejemos cada prenda a mano, con cariÃ±o y atenciÃ³n
+            al detalle. Desde Cartagena creamos piezas Ãºnicas, pensadas para
             ti y hechas a tu medida.
         </p>
 
@@ -307,7 +307,7 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
             <div>
-                <h3>Enlaces rápidos</h3>
+                <h3>Enlaces rÃ¡pidos</h3>
                 <a href="#inicio">Inicio</a>
                 <a href="#productos">Productos</a>
                 <a href="#personalizados">Personalizados</a>
@@ -315,20 +315,20 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
             <div>
-                <h3>Contáctanos</h3>
+                <h3>ContÃ¡ctanos</h3>
                 <p>customknits@gmail.com</p>
                 <p>+57 3019577903</p>
-                <p>Cartagena, Bolívar</p>
+                <p>Cartagena, BolÃ­var</p>
             </div>
 
             <div>
-                <h3>Suscríbete</h3>
+                <h3>SuscrÃ­bete</h3>
                 <p>Recibe nuestras novedades y ofertas especiales.</p>
 
                 <div class="suscripcion">
                     <input
                         type="email"
-                        placeholder="Tu correo electrónico">
+                        placeholder="Tu correo electrÃ³nico">
 
                     <button>Suscribirme</button>
                 </div>
@@ -337,13 +337,13 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <div class="footer-final">
-            <p>© 2026 Custom Knits. Todos los derechos reservados.</p>
+            <p>Â© 2026 Custom Knits. Todos los derechos reservados.</p>
         </div>
 
     </footer>
 
 
-    <script src="script.js"></script>
+    <script src="frontend/js/script.js"></script>
 
 </body>
 </html>
