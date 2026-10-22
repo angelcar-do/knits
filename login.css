@@ -1,24 +1,33 @@
-
-
 :root {
     --color-fondo: #f4f0e8;
-    --color-tarjeta: #fffefa;
     --color-principal: #687653;
     --color-principal-hover: #515e40;
     --color-secundario: #87916b;
     --color-texto: #25251f;
-    --color-texto-suave: #77776f;
-    --color-borde: #e5dfd3;
+    --color-texto-suave: #5f5a66;
     --color-error: #b42318;
     --color-exito: #287344;
+
+    --color-lana: #dccfe9;
+    --color-morado: #6a0dad;
+
+    /* Dibujos en SVG que se usan como fondos (no hace falta tocarlos) */
+
+    /* Puntada en V del tejido */
+    --svg-puntada: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5L4 7.2L7 1.5' stroke='rgba(70,40,110,.24)' stroke-width='2.4'/%3E%3Cpath d='M1 .5L4 6.2L7 .5' stroke='rgba(255,255,255,.36)' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E");
+
+    /* Pelusa de la lana */
+    --svg-pelusa: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .15 0 0 0 0 .3 0 0 0 1.2 -.4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+
+    /* Rombo escalonado, hecho con cuadritos como una puntada */
+    --svg-rombo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='39' height='36' viewBox='0 0 39 36'%3E%3Cpath fill='%23b5532f' transform='translate(5.5 4) scale(4)' d='M3 0h1v1h-1zM2 1h3v1h-3zM1 2h5v1h-5zM0 3h7v1h-7zM1 4h5v1h-5zM2 5h3v1h-3zM3 6h1v1h-1z'/%3E%3C/svg%3E");
+
+    /* Flecos de largos y ángulos distintos */
+    --svg-flecos: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='30' viewBox='0 0 96 30' fill='none' stroke-width='3' stroke-linecap='round'%3E%3Cg stroke='%23b5532f'%3E%3Cpath d='M6 30L4 6M18 30L19.5 1.5M42 30L44 2M54 30L52.5 5M66 30L67 1.5M90 30L91.5 3'/%3E%3C/g%3E%3Cg stroke='%2387916b'%3E%3Cpath d='M30 30L29 8M78 30L76 7'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 * {
     box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
 }
 
 body {
@@ -27,16 +36,8 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: var(--color-texto);
     background:
-        radial-gradient(
-            circle at top left,
-            #ffffffb8,
-            transparent 40%
-        ),
-        linear-gradient(
-            135deg,
-            var(--color-fondo),
-            #e5ddcf
-        );
+        radial-gradient(circle at top left, #ffffffb8, transparent 40%),
+        linear-gradient(135deg, var(--color-fondo), #e5ddcf);
 }
 
 .contenedor {
@@ -48,11 +49,9 @@ body {
     justify-content: center;
 }
 
-
 .volver {
     width: 100%;
     max-width: 440px;
-    margin-bottom: 18px;
     color: #555747;
     text-decoration: none;
     font-size: 14px;
@@ -63,14 +62,69 @@ body {
     color: var(--color-principal);
 }
 
+/* TARJETA = BUFANDA */
+
 .tarjeta {
+    position: relative;
     width: 100%;
     max-width: 440px;
-    padding: 36px;
-    background: #E8E1F5;
-    border: 1px solid #e8e2d7;
-    border-radius: 18px;
-    box-shadow: 0 18px 50px #342b1914;
+    margin: 44px 0 50px;
+    /* arriba y abajo dejamos sitio para las franjas y los rombos */
+    padding: 104px 44px;
+    border-radius: 4px;
+    background-color: var(--color-lana);
+    /* de arriba hacia abajo: pelusa, bordes de punto elástico y puntadas */
+    background-image:
+        var(--svg-pelusa),
+        linear-gradient(0deg, rgba(40, 30, 60, 0.22) 3px, transparent 3px),
+        linear-gradient(0deg, rgba(40, 30, 60, 0.22) 3px, transparent 3px),
+        var(--svg-puntada);
+    background-size: 200px 200px, 10px 6px, 10px 6px, 8px 8px;
+    background-position: 0 0, left top, right top, 0 0;
+    background-repeat: repeat, repeat-y, repeat-y, repeat;
+    box-shadow:
+        inset 0 0 22px rgba(50, 30, 20, 0.35),
+        0 14px 30px rgba(60, 40, 20, 0.28);
+    animation: aparecer 0.5s ease both;
+}
+
+/* Extremos de la bufanda: flecos + franjas + banda de rombos */
+.tarjeta::before,
+.tarjeta::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 107px;
+    pointer-events: none;
+    background-image:
+        var(--svg-flecos),
+        var(--svg-rombo),
+        linear-gradient(
+            to bottom,
+            #b5532f 0 10px,
+            #f1e8d8 10px 14px,
+            #87916b 14px 26px,
+            var(--color-morado) 26px 30px,
+            transparent 30px 32px,
+            #f1e8d8 32px 68px,
+            #87916b 68px 73px,
+            transparent 73px
+        );
+    background-repeat: repeat-x, repeat-x, no-repeat;
+    background-size: 96px 30px, 39px 36px, 100% 77px;
+}
+
+.tarjeta::before {
+    top: -30px;
+    background-position: center 0, center 62px, 0 30px;
+}
+
+/* El de abajo es el mismo dibujo, volteado */
+.tarjeta::after {
+    bottom: -30px;
+    transform: scaleY(-1);
+    background-position: 48px 0, center 62px, 0 30px;
 }
 
 .marca {
@@ -80,7 +134,7 @@ body {
 }
 
 .marca span {
-    color: var(--color-secundario);
+    color: var(--color-principal);
 }
 
 /* TEXTOS */
@@ -88,7 +142,7 @@ body {
 .etiqueta {
     margin-top: 25px;
     margin-bottom: 10px;
-    color: var(--color-secundario);
+    color: var(--color-principal);
     font-size: 11px;
     font-weight: bold;
     letter-spacing: 2px;
@@ -107,6 +161,8 @@ h1 {
     line-height: 1.7;
 }
 
+/* FORMULARIO */
+
 form {
     display: flex;
     flex-direction: column;
@@ -122,7 +178,7 @@ input {
     width: 100%;
     min-height: 46px;
     padding: 13px 14px;
-    border: 1px solid #deded4;
+    border: 1px solid #d6cce3;
     border-radius: 10px;
     background: #fff;
     color: var(--color-texto);
@@ -131,8 +187,7 @@ input {
     outline: none;
     transition:
         border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+        box-shadow 0.2s ease;
 }
 
 input::placeholder {
@@ -140,16 +195,15 @@ input::placeholder {
 }
 
 input:hover {
-    border-color: #b8bea9;
+    border-color: #b8a9cf;
 }
 
 input:focus {
     border-color: var(--color-principal);
-    background: #fffefa;
-    box-shadow: 0 0 0 4px #87916b20;
+    box-shadow: 0 0 0 4px #87916b30;
 }
 
-/* BOTÓN DE INICIO DE SESIÓN */
+/* BOTÓN */
 
 button {
     width: 100%;
@@ -158,12 +212,12 @@ button {
     padding: 14px;
     border: 0;
     border-radius: 9px;
-    background: #6A0DAD;
+    background: var(--color-morado);
     color: white;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 5px 12px #68765320;
+    box-shadow: 0 5px 12px #6a0dad30;
     transition:
         background 0.2s ease,
         transform 0.2s ease,
@@ -171,17 +225,25 @@ button {
 }
 
 button:hover {
-    background: #6A0DAD;
+    background: #57098f;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px #6a0dad40;
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 button:disabled {
     opacity: 0.7;
     cursor: wait;
+    transform: none;
     box-shadow: none;
 }
 
+/* MENSAJES */
+
 #mensaje {
-    min-height: 0;
     margin: 12px 0 0;
     font-size: 13px;
     line-height: 1.6;
@@ -222,7 +284,6 @@ button:disabled {
 }
 
 footer {
-    margin-top: 24px;
     color: var(--color-texto-suave);
     font-size: 12px;
     text-align: center;
@@ -246,8 +307,7 @@ footer {
     }
 
     .tarjeta {
-        padding: 27px 21px;
-        border-radius: 16px;
+        padding: 98px 30px;
     }
 
     .marca {
@@ -267,7 +327,6 @@ footer {
     *,
     *::before,
     *::after {
-        scroll-behavior: auto !important;
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }

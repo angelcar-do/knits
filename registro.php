@@ -9,7 +9,7 @@
 
     <meta name="description" content="Crea tu cuenta en Custom Knits y descubre prendas hechas para ti.">
 
-    <link rel="stylesheet" href="registro.css">
+      <link rel="stylesheet" href="registro.css?v=2">
     <script src="registro.js" defer></script>
 </head>
 

@@ -81,10 +81,9 @@ input:focus-visible {
 }
 
 .logo img {
-    width: 150px;      
-    height: 68px;        
+    width: 150px;
     max-width: none;    
-    object-fit: cover;   
+    object-fit: cover;
     display: block;
     border-radius: 12px;
     filter: contrast(1.12) saturate(1.25);
@@ -566,9 +565,6 @@ input:focus-visible {
 .personalizacion-imagenes img:last-child {
     transform: translateY(10px);
 }
-
-
-/* SOBRE NOSOTROS (el enlace del menú apunta a #nosotros) */
 
 .sobre-nosotros {
     padding: 65px 10%;
