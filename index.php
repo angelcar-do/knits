@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,6 +39,7 @@
             <a href="#nosotros">Sobre nosotros</a>
             <a href="#contacto">Contacto</a>
         </nav>
+        <a href="backend/usuarios/logout.php">Cerrar sesión</a>
 
         <div class="iconos">
             <i class="fa-solid fa-magnifying-glass"></i>
