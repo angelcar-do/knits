@@ -1,11 +1,14 @@
-﻿<?php
-session_start();
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/backend/config/sesion.php';
 
 if (!isset($_SESSION['usuario'])) {
     header('Location: login.php');
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
