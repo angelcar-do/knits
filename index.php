@@ -42,7 +42,10 @@ if (!isset($_SESSION['usuario'])) {
             <a href="#nosotros">Sobre nosotros</a>
             <a href="#contacto">Contacto</a>
         </nav>
-        <a href="backend/usuarios/logout.php">Cerrar sesion</a>
+       <a href="backend/usuarios/logout.php" class="cerrar-sesion">
+         <i class="fa-solid fa-right-from-bracket"></i>
+         Cerrar sesión
+        </a>
 
         <div class="iconos">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -134,7 +137,7 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="categoria">
             <i class="fa-solid fa-child-reaching"></i>
-            <p>Ropa para bebÃ©</p>
+            <p>Ropa para bebe</p>
         </div>
 
         <div class="categoria">
@@ -165,7 +168,7 @@ if (!isset($_SESSION['usuario'])) {
             <article class="producto">
 
                 <div class="imagen-producto">
-                    <img src="img/monedero.jpg" alt="SuÃ©ter tejido">
+                    <img src="img/Monedero.jpg" alt="Monedero tejido">
                     <button class="favorito">
                         <i class="fa-regular fa-heart"></i>
                     </button>
@@ -186,7 +189,7 @@ if (!isset($_SESSION['usuario'])) {
             <article class="producto">
 
                 <div class="imagen-producto">
-                    <img src="img/vestido.jpg" alt="Gorro de lana">
+                    <img src="img/vestido.jpg" alt="vestido tejido">
                     <button class="favorito">
                         <i class="fa-regular fa-heart"></i>
                     </button>
@@ -268,7 +271,7 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
             <div>
-                <h3>Enlaces rÃ¡pidos</h3>
+                <h3>Enlaces rapidos</h3>
                 <a href="#inicio">Inicio</a>
                 <a href="#productos">Productos</a>
                 <a href="#personalizados">Personalizados</a>
@@ -289,7 +292,7 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="suscripcion">
                     <input
                         type="email"
-                        placeholder="Tu correo electrÃ³nico">
+                        placeholder="Tu correo electronico">
 
                     <button>Suscribirme</button>
                 </div>
