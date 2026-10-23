@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="theme-color" content="#687653">
-    <meta name="description" content="Inicia sesión en Custom Knits y descubre prendas hechas para ti.">
+    <meta name="description" content="Inicia sesiÃ³n en Custom Knits y descubre prendas hechas para ti.">
 
-    <title>Iniciar sesión | Custom Knits</title>
+    <title>Iniciar sesion | Custom Knits</title>
 
     <link rel="stylesheet" href="login.css
     ">
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="frontend/css/login.css">
 </head>
 
 <body>
     <main class="contenedor">
 
         <a class="volver" href="index.php">
-            ← Volver a la tienda
+           Volver a la tienda
         </a>
 
         <section class="tarjeta" aria-labelledby="tituloLogin">
@@ -30,7 +30,7 @@
 
             <p class="etiqueta">BIENVENIDO DE NUEVO</p>
 
-            <h1 id="tituloLogin">Inicia sesión</h1>
+            <h1 id="tituloLogin">Inicia sesion</h1>
 
             <p class="descripcion">
                 Entra a tu cuenta y sigue descubriendo tu estilo.
@@ -38,7 +38,7 @@
 
             <form id="formLogin" method="post">
 
-                <label for="correo">Correo electrónico</label>
+                <label for="correo">Correo electronico</label>
 
                 <input
                     id="correo"
@@ -64,7 +64,7 @@
                 >
 
                 <button id="btnLogin" type="submit">
-                    Iniciar sesión
+                    Iniciar sesion
                 </button>
 
                 <p
@@ -76,17 +76,17 @@
             </form>
 
             <p class="enlace">
-                ¿Todavía no tienes cuenta?
-                <a href="registro.php">Regístrate aquí</a>
+                ¿Todavi­a no tienes cuenta?
+                <a href="registro.php">Registrate aqui­</a>
             </p>
 
         </section>
 
         <footer>
-            © 2026 Custom Knits · Diseñado para ti
+            Â© 2026 Custom Knits  Diseñado para ti
         </footer>
 
     </main>
-<script src="login.js" defer></script>
+<script src="frontend/js/login.js" defer></script>
 </body>
 </html>

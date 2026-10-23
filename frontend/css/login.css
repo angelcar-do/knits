@@ -11,18 +11,13 @@
     --color-lana: #dccfe9;
     --color-morado: #6a0dad;
 
-    /* Dibujos en SVG que se usan como fondos (no hace falta tocarlos) */
-
-    /* Puntada en V del tejido */
+   
     --svg-puntada: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5L4 7.2L7 1.5' stroke='rgba(70,40,110,.24)' stroke-width='2.4'/%3E%3Cpath d='M1 .5L4 6.2L7 .5' stroke='rgba(255,255,255,.36)' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E");
 
-    /* Pelusa de la lana */
     --svg-pelusa: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .15 0 0 0 0 .3 0 0 0 1.2 -.4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
 
-    /* Rombo escalonado, hecho con cuadritos como una puntada */
     --svg-rombo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='39' height='36' viewBox='0 0 39 36'%3E%3Cpath fill='%23b5532f' transform='translate(5.5 4) scale(4)' d='M3 0h1v1h-1zM2 1h3v1h-3zM1 2h5v1h-5zM0 3h7v1h-7zM1 4h5v1h-5zM2 5h3v1h-3zM3 6h1v1h-1z'/%3E%3C/svg%3E");
 
-    /* Flecos de largos y ángulos distintos */
     --svg-flecos: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='30' viewBox='0 0 96 30' fill='none' stroke-width='3' stroke-linecap='round'%3E%3Cg stroke='%23b5532f'%3E%3Cpath d='M6 30L4 6M18 30L19.5 1.5M42 30L44 2M54 30L52.5 5M66 30L67 1.5M90 30L91.5 3'/%3E%3C/g%3E%3Cg stroke='%2387916b'%3E%3Cpath d='M30 30L29 8M78 30L76 7'/%3E%3C/g%3E%3C/svg%3E");
 }
 
@@ -62,18 +57,15 @@ body {
     color: var(--color-principal);
 }
 
-/* TARJETA = BUFANDA */
 
 .tarjeta {
     position: relative;
     width: 100%;
     max-width: 440px;
     margin: 44px 0 50px;
-    /* arriba y abajo dejamos sitio para las franjas y los rombos */
     padding: 104px 44px;
     border-radius: 4px;
     background-color: var(--color-lana);
-    /* de arriba hacia abajo: pelusa, bordes de punto elástico y puntadas */
     background-image:
         var(--svg-pelusa),
         linear-gradient(0deg, rgba(40, 30, 60, 0.22) 3px, transparent 3px),
@@ -88,7 +80,6 @@ body {
     animation: aparecer 0.5s ease both;
 }
 
-/* Extremos de la bufanda: flecos + franjas + banda de rombos */
 .tarjeta::before,
 .tarjeta::after {
     content: "";
@@ -120,7 +111,6 @@ body {
     background-position: center 0, center 62px, 0 30px;
 }
 
-/* El de abajo es el mismo dibujo, volteado */
 .tarjeta::after {
     bottom: -30px;
     transform: scaleY(-1);
@@ -136,8 +126,6 @@ body {
 .marca span {
     color: var(--color-principal);
 }
-
-/* TEXTOS */
 
 .etiqueta {
     margin-top: 25px;
@@ -160,8 +148,6 @@ h1 {
     font-size: 14px;
     line-height: 1.7;
 }
-
-/* FORMULARIO */
 
 form {
     display: flex;
@@ -203,8 +189,6 @@ input:focus {
     box-shadow: 0 0 0 4px #87916b30;
 }
 
-/* BOTÓN */
-
 button {
     width: 100%;
     min-height: 48px;
@@ -240,8 +224,6 @@ button:disabled {
     transform: none;
     box-shadow: none;
 }
-
-/* MENSAJES */
 
 #mensaje {
     margin: 12px 0 0;

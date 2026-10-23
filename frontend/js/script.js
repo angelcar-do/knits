@@ -94,7 +94,6 @@ function agregarCarrito(producto, precio) {
     mostrarAviso(nombre + " agregado al carrito");
 }
 
-// Aviso visual
 function mostrarAviso(texto) {
     let aviso = document.getElementById("avisoCarrito");
 
@@ -472,3 +471,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mostrarSlide(0);
 });
+
+async function cargarProductosDesdeMongoDB() {
+    const contenedor = document.getElementById("productosGrid");
+
+    if (!contenedor) return;
+
+    try {
+        const respuesta = await fetch("backend/productos/listar.php");
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudieron consultar los productos.");
+        }
+
+        const datos = await respuesta.json();
+
+        if (!datos.ok || !Array.isArray(datos.productos)) {
+            throw new Error("La respuesta del catálogo no es válida.");
+        }
+
+        if (datos.productos.length === 0) {
+            contenedor.textContent = "Todavía no hay productos disponibles.";
+            return;
+        }
+
+        contenedor.replaceChildren();
+
+        datos.productos.forEach(producto => {
+            const tarjeta = document.createElement("article");
+            tarjeta.className = "producto";
+
+            const imagenContenedor = document.createElement("div");
+            imagenContenedor.className = "imagen-producto";
+
+            const imagen = document.createElement("img");
+            imagen.src = producto.imagen;
+            imagen.alt = producto.nombre;
+
+            const favorito = document.createElement("button");
+            favorito.className = "favorito";
+            favorito.type = "button";
+            favorito.setAttribute("aria-label", "Marcar como favorito");
+
+            const corazon = document.createElement("i");
+            corazon.className = "fa-regular fa-heart";
+            favorito.appendChild(corazon);
+
+            imagenContenedor.append(imagen, favorito);
+
+            const informacion = document.createElement("div");
+            informacion.className = "info-producto";
+
+            const nombre = document.createElement("h3");
+            nombre.textContent = producto.nombre;
+
+            const precio = document.createElement("p");
+            precio.className = "precio";
+            precio.textContent = formatoPrecio(Number(producto.precio));
+
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.innerHTML =
+                '<i class="fa-solid fa-cart-shopping"></i> Agregar al carrito';
+
+            boton.addEventListener("click", () => {
+                agregarCarrito(producto.nombre, Number(producto.precio));
+            });
+
+            informacion.append(nombre, precio, boton);
+            tarjeta.append(imagenContenedor, informacion);
+            contenedor.appendChild(tarjeta);
+        });
+
+    } catch (error) {
+        console.error("Error cargando el catálogo:", error);
+        contenedor.textContent =
+            "No pudimos cargar los productos. Recarga la página para intentarlo de nuevo.";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", cargarProductosDesdeMongoDB);
