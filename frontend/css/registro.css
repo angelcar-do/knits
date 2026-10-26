@@ -15,13 +15,10 @@
 
     --svg-puntada: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5L4 7.2L7 1.5' stroke='rgba(70,40,110,.24)' stroke-width='2.4'/%3E%3Cpath d='M1 .5L4 6.2L7 .5' stroke='rgba(255,255,255,.36)' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E");
 
-    /* Pelusa de la lana */
     --svg-pelusa: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .15 0 0 0 0 .3 0 0 0 1.2 -.4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
 
-    /* Rombo escalonado, hecho con cuadritos como una puntada */
     --svg-rombo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='39' height='36' viewBox='0 0 39 36'%3E%3Cpath fill='%23b5532f' transform='translate(5.5 4) scale(4)' d='M3 0h1v1h-1zM2 1h3v1h-3zM1 2h5v1h-5zM0 3h7v1h-7zM1 4h5v1h-5zM2 5h3v1h-3zM3 6h1v1h-1z'/%3E%3C/svg%3E");
 
-    /* Flecos de largos y ángulos distintos */
     --svg-flecos: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='30' viewBox='0 0 96 30' fill='none' stroke-width='3' stroke-linecap='round'%3E%3Cg stroke='%23b5532f'%3E%3Cpath d='M6 30L4 6M18 30L19.5 1.5M42 30L44 2M54 30L52.5 5M66 30L67 1.5M90 30L91.5 3'/%3E%3C/g%3E%3Cg stroke='%2387916b'%3E%3Cpath d='M30 30L29 8M78 30L76 7'/%3E%3C/g%3E%3C/svg%3E");
 }
 
@@ -62,8 +59,6 @@ body {
     color: var(--verde-oscuro);
 }
 
-/* TARJETA = BUFANDA */
-
 .registro-tarjeta {
     position: relative;
     width: 100%;
@@ -88,7 +83,6 @@ body {
     animation: aparecer 0.45s ease both;
 }
 
-/* Extremos de la bufanda: flecos + franjas + banda de rombos */
 .registro-tarjeta::before,
 .registro-tarjeta::after {
     content: "";
@@ -120,7 +114,6 @@ body {
     background-position: center 0, center 62px, 0 30px;
 }
 
-/* El de abajo es el mismo dibujo, volteado */
 .registro-tarjeta::after {
     bottom: -30px;
     transform: scaleY(-1);
@@ -136,8 +129,6 @@ body {
 .marca span {
     color: var(--verde);
 }
-
-/* TEXTOS */
 
 .etiqueta {
     margin-top: 22px;
@@ -160,8 +151,6 @@ h1 {
     font-size: 14px;
     line-height: 1.6;
 }
-
-/* FORMULARIO */
 
 #formRegistro {
     display: flex;
@@ -202,8 +191,6 @@ input:focus {
     border-color: var(--verde-claro);
     box-shadow: 0 0 0 3px #87916b30;
 }
-
-/* BOTÓN */
 
 button {
     width: 100%;
@@ -247,8 +234,6 @@ button:disabled {
     transform: none;
     box-shadow: none;
 }
-
-/* MENSAJES */
 
 #mensaje {
     margin: 12px 0 0;

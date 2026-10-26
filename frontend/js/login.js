@@ -68,9 +68,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             boton.textContent = "Sesión iniciada";
 
+            
             window.setTimeout(() => {
-                window.location.href = "index.php";
-            }, 1000);
+            const parametros = new URLSearchParams(window.location.search);
+            const destino = parametros.get("redirect");
+
+           if (destino === "finalizar-compra.php") {
+          window.location.href = "finalizar-compra.php";
+        } else {
+           window.location.href = "index.php";
+    }
+}, 1000);
+
 
         } catch (error) {
             console.error("Error al iniciar sesión:", error);

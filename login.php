@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="theme-color" content="#687653">
-    <meta name="description" content="Inicia sesiÃ³n en Custom Knits y descubre prendas hechas para ti.">
+    <meta name="description" content="Inicia sesion en Custom Knits y descubre prendas hechas para ti.">
 
     <title>Iniciar sesion | Custom Knits</title>
 
-    <link rel="stylesheet" href="login.css
-    ">
     <link rel="stylesheet" href="frontend/css/login.css">
 </head>
 

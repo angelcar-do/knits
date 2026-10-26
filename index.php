@@ -3,12 +3,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/backend/config/sesion.php';
 
-if (!isset($_SESSION['usuario'])) {
-    header('Location: login.php');
-    exit;
-}
+$usuario = $_SESSION['usuario'] ?? null;
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -42,20 +38,25 @@ if (!isset($_SESSION['usuario'])) {
             <a href="#nosotros">Sobre nosotros</a>
             <a href="#contacto">Contacto</a>
         </nav>
-       <a href="backend/usuarios/logout.php" class="cerrar-sesion">
-         <i class="fa-solid fa-right-from-bracket"></i>
-         Cerrar sesión
-        </a>
+
+        <?php if ($usuario): ?>
+            <a href="backend/usuarios/logout.php" class="cerrar-sesion">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Cerrar sesión
+            </a>
+        <?php else: ?>
+            <a href="login.php" class="cerrar-sesion">
+                <i class="fa-regular fa-user"></i>
+                Iniciar sesión
+            </a>
+        <?php endif; ?>
 
         <div class="iconos">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-regular fa-user"></i>
-
             <div class="carrito" onclick="abrirCarrito()" role="button" tabindex="0"
-     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCarrito();}">
-    <i class="fa-solid fa-cart-shopping"></i>
-    <span id="contador">0</span>
-</div>
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCarrito();}">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span id="contador">0</span>
+            </div>
         </div>
 
     </header>
@@ -70,45 +71,58 @@ if (!isset($_SESSION['usuario'])) {
             </p>
 
             <h2>
-                Prendas tejidas a mano
+                Prendas <span class="texto-hilo">tejidas a mano</span>
                 <br>
-                que cuentan historias
+                que cuentan <span class="texto-hilo">historias</span>
             </h2>
 
             <p>
-                Descubre nuestra coleccion de prendas y accesorios tejidos
+                Descubre nuestra colección de prendas y accesorios tejidos
                 con amor, diseñados para brindarte comodidad, estilo y un
                 toque único.
             </p>
 
-            <button onclick="verProductos()">
-                Ver productos
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
+            <div class="hero-botones">
+                <button class="boton-principal" onclick="verProductos()">
+                    Ver productos
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
 
+                <button class="boton-secundario" onclick="solicitarPersonalizado()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Personalizar pedido
+                </button>
+            </div>
         </div>
 
         <div class="hero-imagen">
 
-    <img
-        class="hero-slide activo"
-        src="img/tejido.jpg"
-        alt="Prendas tejidas a mano">
+            <img
+                class="hero-slide activo"
+                src="img/tejido.jpg"
+                alt="Prendas tejidas a mano">
 
-    <img
-        class="hero-slide"
-        src="img/gorro.jpg"
-        alt="Tejidos personalizados">
+            <img
+                class="hero-slide"
+                src="img/gorro.jpg"
+                alt="Tejidos personalizados">
 
-    <video
-        class="hero-slide"
-        muted
-        playsinline
-        preload="auto">
-        <source src="img/vdtejido.mp4" type="video/mp4">
-    </video>
+            <video
+                class="hero-slide"
+                muted
+                playsinline
+                preload="auto">
+                <source src="img/vdtejido.mp4" type="video/mp4">
+            </video>
 
-</div>
+            <div class="hero-etiqueta">
+                <i class="fa-solid fa-heart"></i>
+                100% tejido a mano · Cartagena
+            </div>
+
+        </div>
+
+        <div class="hero-borde" aria-hidden="true"></div>
 
     </section>
 
@@ -137,7 +151,7 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="categoria">
             <i class="fa-solid fa-child-reaching"></i>
-            <p>Ropa para bebe</p>
+            <p>Ropa para bebé</p>
         </div>
 
         <div class="categoria">
@@ -160,53 +174,8 @@ if (!isset($_SESSION['usuario'])) {
             Diseños únicos, hechos para ti
         </p>
 
-
         <div class="productos-grid" id="productosGrid">
-    <p>Cargando productos...</p>
-
-    
-            <article class="producto">
-
-                <div class="imagen-producto">
-                    <img src="img/Monedero.jpg" alt="Monedero tejido">
-                    <button class="favorito">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                </div>
-
-                <div class="info-producto">
-                    <h3>Monedero tejido</h3>
-                    <p class="precio">$45.000</p>
-
-                    <button onclick="agregarCarrito('monedero tejido')">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        Agregar al carrito
-                    </button>
-                </div>
-
-            </article>
-
-            <article class="producto">
-
-                <div class="imagen-producto">
-                    <img src="img/vestido.jpg" alt="vestido tejido">
-                    <button class="favorito">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                </div>
-
-                <div class="info-producto">
-                    <h3>Vestido tejido</h3>
-                    <p class="precio">$200.000</p>
-
-                    <button onclick="agregarCarrito('Vestido tejido')">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        Agregar al carrito
-                    </button>
-                </div>
-
-            </article>
-
+            <p>Cargando productos...</p>
         </div>
 
     </section>
@@ -216,7 +185,7 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="personalizacion-texto">
 
-            <p>HAZLO UNICO</p>
+            <p>HAZLO ÚNICO</p>
 
             <h2>Personaliza tu pedido</h2>
 
@@ -242,7 +211,6 @@ if (!isset($_SESSION['usuario'])) {
     </section>
 
 
-
     <section class="sobre-nosotros" id="nosotros">
 
         <div class="titulo-seccion">
@@ -252,8 +220,8 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <p>
-            En Custom Knits tejemos cada prenda a mano, con cariño y atencion
-            al detalle. Desde Cartagena creamos piezas unicas, pensadas para
+            En Custom Knits tejemos cada prenda a mano, con cariño y atención
+            al detalle. Desde Cartagena creamos piezas únicas, pensadas para
             ti y hechas a tu medida.
         </p>
 
@@ -271,7 +239,7 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
             <div>
-                <h3>Enlaces rapidos</h3>
+                <h3>Enlaces rápidos</h3>
                 <a href="#inicio">Inicio</a>
                 <a href="#productos">Productos</a>
                 <a href="#personalizados">Personalizados</a>
@@ -279,20 +247,20 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
             <div>
-                <h3>ContÃ¡ctanos</h3>
+                <h3>Contáctanos</h3>
                 <p>customknits@gmail.com</p>
                 <p>+57 3019577903</p>
-                <p>Cartagena, Boli­var</p>
+                <p>Cartagena, Bolívar</p>
             </div>
 
             <div>
-                <h3>Suscri­bete</h3>
+                <h3>Suscríbete</h3>
                 <p>Recibe nuestras novedades y ofertas especiales.</p>
 
                 <div class="suscripcion">
                     <input
                         type="email"
-                        placeholder="Tu correo electronico">
+                        placeholder="Tu correo electrónico">
 
                     <button>Suscribirme</button>
                 </div>
@@ -301,7 +269,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <div class="footer-final">
-            <p>Â© 2026 Custom Knits. Todos los derechos reservados.</p>
+            <p>© 2026 Custom Knits. Todos los derechos reservados.</p>
         </div>
 
     </footer>

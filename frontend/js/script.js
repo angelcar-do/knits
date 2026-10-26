@@ -1,13 +1,21 @@
-
 "use strict";
 
 const CLAVE_CARRITO = "customKnitsCarrito";
 
+// Los nombres van en minúscula y deben coincidir con los que usa el catálogo.
 const PRECIOS = {
     "monedero tejido": 45000,
     "vestido tejido": 200000,
     "gorro tejido": 25000,
-    "mochila tejido": 125000
+    "mochila tejida": 125000
+};
+
+// Imagen que se muestra en el carrito según el nombre del producto.
+const IMAGENES = {
+    "monedero tejido": "img/Monedero.jpg",
+    "vestido tejido": "img/Vestido.jpg",
+    "gorro tejido": "img/Gorro.jpg",
+    "mochila tejida": "img/Mochila.jpg"
 };
 
 let carrito = cargarCarrito();
@@ -43,6 +51,19 @@ function formatoPrecio(valor) {
         currency: "COP",
         maximumFractionDigits: 0
     }).format(valor);
+}
+
+// Pregunta al servidor si hay un usuario con sesión iniciada.
+async function haySesion() {
+    try {
+        const respuesta = await fetch("backend/usuarios/estado_sesion.php", {
+            credentials: "same-origin"
+        });
+        const datos = await respuesta.json();
+        return datos.logueado === true;
+    } catch (error) {
+        return false;
+    }
 }
 
 function actualizarContador() {
@@ -179,6 +200,13 @@ function crearVentanaCarrito() {
                     Seguir comprando
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
+
+                <button id="finalizarCompra"
+                        class="carrito-boton carrito-boton-seguir"
+                        type="button">
+                    Finalizar compra
+                    <i class="fa-solid fa-credit-card"></i>
+                </button>
             </div>
         </div>
     `;
@@ -192,6 +220,29 @@ function crearVentanaCarrito() {
     document.getElementById("seguirComprando").addEventListener(
         "click", cerrarVentanaCarrito
     );
+
+    // Aquí es el ÚNICO lugar donde se exige iniciar sesión: al comprar.
+    document.getElementById("finalizarCompra")
+        .addEventListener("click", async () => {
+            if (carrito.length === 0) {
+                alert("Tu carrito está vacío.");
+                return;
+            }
+
+            if (await haySesion()) {
+                window.location.href = "finalizar-compra.php";
+            } else {
+                const irALogin = confirm(
+                    "Inicia sesión para finalizar tu compra. " +
+                    "Tu carrito se conservará.\n\n" +
+                    "¿Quieres ir a iniciar sesión ahora?"
+                );
+
+                if (irALogin) {
+                    window.location.href = "login.php?redirect=finalizar-compra.php";
+                }
+            }
+        });
 
     ventana.addEventListener("click", evento => {
         if (evento.target === ventana) {
@@ -287,36 +338,14 @@ function renderizarCarrito() {
         const detalle = document.createElement("div");
         detalle.className = "carrito-producto-detalle";
 
-        if (producto.nombre.trim().toLowerCase() === "monedero tejido") {
-            const imagen = document.createElement("img");
-            imagen.className = "carrito-producto-imagen";
-            imagen.src = "img/Monedero.jpg";
-            imagen.alt = "Monedero tejido";
-            detalle.appendChild(imagen);
-        }
+        // Imagen según el nombre del producto (ver el objeto IMAGENES arriba).
+        const rutaImagen = IMAGENES[producto.nombre.trim().toLowerCase()];
 
-        
-        if (producto.nombre.trim().toLowerCase() === "mochila tejida") {
+        if (rutaImagen) {
             const imagen = document.createElement("img");
             imagen.className = "carrito-producto-imagen";
-            imagen.src = "img/Mochila.jpg";
-            imagen.alt = "Mochila tejida";
-            detalle.appendChild(imagen);
-        }
-
-         if (producto.nombre.trim().toLowerCase() === "gorro tejido") {
-            const imagen = document.createElement("img");
-            imagen.className = "carrito-producto-imagen";
-            imagen.src = "img/Gorro.jpg";
-            imagen.alt = "Gorro tejido";
-            detalle.appendChild(imagen);
-        }
-
-         if (producto.nombre.trim().toLowerCase() === "vestido tejido") {
-            const imagen = document.createElement("img");
-            imagen.className = "carrito-producto-imagen";
-            imagen.src = "img/Vestido.jpg";
-            imagen.alt = "Vestido tejido";
+            imagen.src = rutaImagen;
+            imagen.alt = producto.nombre;
             detalle.appendChild(imagen);
         }
 
@@ -420,6 +449,8 @@ function solicitarPersonalizado() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    actualizarContador();
+
     const slides = document.querySelectorAll(
         ".hero-imagen .hero-slide"
     );
@@ -569,7 +600,22 @@ async function cargarProductosDesdeMongoDB() {
             boton.innerHTML =
                 '<i class="fa-solid fa-cart-shopping"></i> Agregar al carrito';
 
-            boton.addEventListener("click", () => {
+            boton.addEventListener("click", async () => {
+
+                if (!(await haySesion())) {
+
+                    const irALogin = confirm(
+                        "Inicia sesión para agregar productos al carrito.\n\n" +
+                        "¿Quieres ir a iniciar sesión ahora?"
+                    );
+
+                    if (irALogin) {
+                        window.location.href = "login.php?redirect=index.php";
+                    }
+
+                    return;
+                }
+
                 agregarCarrito(producto.nombre, Number(producto.precio));
             });
 
