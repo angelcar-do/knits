@@ -10,7 +10,7 @@
 
     <title>Iniciar sesion | Custom Knits</title>
 
-    <link rel="stylesheet" href="login.css
+    <link rel="stylesheet" href="frontend/css/login.css
     ">
     <link rel="stylesheet" href="frontend/css/login.css">
 </head>
@@ -90,3 +90,4 @@
 <script src="frontend/js/login.js" defer></script>
 </body>
 </html>
+

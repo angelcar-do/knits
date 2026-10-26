@@ -12,22 +12,44 @@ const PRECIOS = {
 
 let carrito = cargarCarrito();
 
+
 function cargarCarrito() {
     try {
-        const datos = JSON.parse(localStorage.getItem(CLAVE_CARRITO) || "[]");
+        const datos = JSON.parse(
+            localStorage.getItem(CLAVE_CARRITO) || "[]"
+        );
+
         if (!Array.isArray(datos)) return [];
 
-        return datos.filter(p =>
-            p &&
-            typeof p.nombre === "string" &&
-            Number.isFinite(p.precio) &&
-            Number.isInteger(p.cantidad) &&
-            p.cantidad > 0
-        );
+        const CODIGOS_PRODUCTOS = {
+            "monedero tejido": "monedero-tejido",
+            "vestido tejido": "vestido-tejido",
+            "gorro tejido": "gorro-tejido",
+            "mochila tejida": "mochila-tejida",
+            "mochila tejido": "mochila-tejida"
+        };
+
+        return datos
+            .filter(p =>
+                p &&
+                typeof p.nombre === "string" &&
+                Number.isFinite(p.precio) &&
+                Number.isInteger(p.cantidad) &&
+                p.cantidad > 0
+            )
+            .map(p => ({
+                ...p,
+                codigo: CODIGOS_PRODUCTOS[
+                    p.nombre.trim().toLowerCase()
+                ] || p.codigo
+            }))
+            .filter(p => typeof p.codigo === "string");
     } catch (error) {
+        console.error("Error cargando el carrito:", error);
         return [];
     }
 }
+
 
 function guardarCarrito() {
     try {
@@ -78,15 +100,34 @@ function agregarCarrito(producto, precio) {
         p => p.nombre.toLowerCase() === clave
     );
 
-    if (existente) {
-        existente.cantidad++;
-    } else {
-        carrito.push({
-            nombre: nombre,
-            precio: precioFinal,
-            cantidad: 1
-        });
-    }
+  const CODIGOS_PRODUCTOS = {
+    "monedero tejido": "monedero-tejido",
+    "vestido tejido": "vestido-tejido",
+    "gorro tejido": "gorro-tejido",
+    "mochila tejida": "mochila-tejida",
+    "mochila tejido": "mochila-tejida"
+};
+
+const codigo = CODIGOS_PRODUCTOS[clave];
+
+if (!codigo) {
+    alert("No se pudo identificar el código del producto.");
+    return;
+}
+
+
+if (existente) {
+    existente.codigo = codigo;
+    existente.cantidad++;
+} else {
+    carrito.push({
+        codigo: codigo,
+        nombre: nombre,
+        precio: precioFinal,
+        cantidad: 1
+    });
+}
+
 
     guardarCarrito();
     actualizarContador();
@@ -184,6 +225,12 @@ function crearVentanaCarrito() {
                     cursor:pointer;">
                     Seguir comprando
                 </button>
+                <button id="finalizarCompra" type="button"
+    style="border:0; color:white; background:#80634f;
+    padding:11px 16px; border-radius:8px;
+    cursor:pointer;">
+    Finalizar compra
+</button>
             </div>
         </div>
     `;
@@ -197,6 +244,9 @@ function crearVentanaCarrito() {
     document.getElementById("seguirComprando").addEventListener(
         "click", cerrarVentanaCarrito
     );
+    document.getElementById("finalizarCompra").addEventListener(
+    "click", finalizarCompra
+);
 
     ventana.addEventListener("click", evento => {
         if (evento.target === ventana) cerrarVentanaCarrito();
@@ -356,6 +406,66 @@ function calcularTotalCarrito() {
     );
 }
 
+async function finalizarCompra() {
+    if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+    }
+
+    const confirmar = confirm(
+        "¿Deseas registrar el pedido por " +
+        formatoPrecio(calcularTotalCarrito()) + "?"
+    );
+
+    if (!confirmar) return;
+
+    try {
+   const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    ?.getAttribute("content");
+
+if (!csrfToken) {
+    alert("No se pudo validar la seguridad. Recarga la página.");
+    return;
+}
+
+const respuesta = await fetch("backend/pedidos/crear.php", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+    },
+    body: JSON.stringify({
+        productos: carrito.map(producto => ({
+            codigo: producto.codigo,
+            cantidad: producto.cantidad
+        }))
+    })
+});
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok || !datos.ok) {
+            alert(datos.mensaje || "No se pudo registrar el pedido.");
+            return;
+        }
+
+        alert(
+            "¡Pedido registrado correctamente!\n" +
+            "Número: " + datos.pedido_id + "\n" +
+            "Total: " + formatoPrecio(datos.total)
+        );
+
+        vaciarCarrito();
+        cerrarVentanaCarrito();
+
+    } catch (error) {
+        console.error("Error registrando el pedido:", error);
+        alert("No se pudo conectar con el servidor. Inténtalo de nuevo.");
+    }
+}
+
 function vaciarCarrito() {
     carrito = [];
     guardarCarrito();
@@ -381,7 +491,6 @@ function solicitarPersonalizado() {
     );
 }
 
-    alert("Próximamente podrás realizar tu pedido personalizado.");
 
 document.addEventListener("DOMContentLoaded", () => {
     const slides = document.querySelectorAll(

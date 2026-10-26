@@ -39,11 +39,12 @@ try {
 
     session_regenerate_id(true);
 
-    $_SESSION['usuario'] = [
-        'id' => (string)$usuario['_id'],
-        'nombre' => $usuario['nombre'],
-        'correo' => $usuario['correo']
-    ];
+  $_SESSION['usuario'] = [
+    'id' => (string)$usuario['_id'],
+    'nombre' => $usuario['nombre'],
+    'correo' => $usuario['correo'],
+    'rol' => $usuario['rol'] ?? 'cliente'
+];
 
     responder(200, ['ok' => true, 'mensaje' => 'Inicio de sesión correcto.']);
 

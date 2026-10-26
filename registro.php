@@ -9,8 +9,8 @@
 
     <meta name="description" content="Crea tu cuenta en Custom Knits y descubre prendas hechas para ti.">
 
-      <link rel="stylesheet" href="registro.css?v=2">
-    <script src="registro.js" defer></script>
+      <link rel="stylesheet" href="frontend/css/registro.css?v=2">
+    <script src="frontend/js/registro.js" defer></script>
 </head>
 
 <body>
@@ -104,3 +104,4 @@
     </main>
 </body>
 </html>
+
