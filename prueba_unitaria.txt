@@ -1,0 +1,197 @@
+================================================================================
+                    PRUEBA UNITARIA - PROYECTO CUSTOM KNITS
+================================================================================
+
+Proyecto      : Custom Knits (tienda web de tejidos)
+Ficha         : 3315527 - ADSO
+Responsable   : Maria_Te
+Fecha         : 27/10/2026
+Entorno       : Windows 11, PHP 8.3.33 (Laragon), servidor integrado
+                php -S localhost:8080
+Módulos       : Inicio de sesión (login.js / backend/usuarios/login.php)
+                Registro (registro.js / backend/usuarios/registro.php)
+                Conexión (backend/conexion.php)
+
+Estados       : APROBADA  = el resultado obtenido coincide con el esperado
+                FALLIDA   = el resultado obtenido NO coincide
+                PENDIENTE = no se pudo ejecutar (falta base de datos)
+
+================================================================================
+1. MÓDULO: INICIO DE SESIÓN - VALIDACIÓN EN EL NAVEGADOR (login.js)
+================================================================================
+
+PU-01  Campos vacíos
+  Entrada           : correo = ""  contraseña = ""
+  Resultado esperado: Mensaje "Completa todos los campos." y no se envía
+                      la petición al servidor.
+  Resultado obtenido:
+  Estado            :
+
+PU-02  Correo con espacios y mayúsculas
+  Entrada           : correo = "  ANA@Correo.COM "  contraseña = "Clave1234"
+  Resultado esperado: El correo se envía como "ana@correo.com".
+  Resultado obtenido:
+  Estado            :
+
+PU-03  Botón durante el envío
+  Entrada           : Datos completos, clic en "Iniciar sesión"
+  Resultado esperado: El botón se desactiva y muestra "Verificando...".
+  Resultado obtenido:
+  Estado            :
+
+================================================================================
+2. MÓDULO: INICIO DE SESIÓN - SERVIDOR (backend/usuarios/login.php)
+================================================================================
+
+PU-04  Método HTTP no permitido
+  Entrada           : Petición GET a backend/usuarios/login.php
+  Resultado esperado: Código 405 y {"ok":false,"mensaje":"Método no permitido."}
+  Resultado obtenido: Código 405 y {"ok":false,"mensaje":"Método no permitido."}
+  Estado            : APROBADA
+
+PU-05  Datos vacíos por POST
+  Entrada           : POST con cuerpo {}
+  Resultado esperado: Código 400 y "Escribe tu correo y contraseña."
+  Resultado obtenido: Código 500. No existe backend/config.local.php y la
+                      conexión falla antes de validar los datos.
+  Estado            : FALLIDA
+
+PU-06  Credenciales correctas
+  Entrada           : Correo y contraseña de un usuario registrado
+  Resultado esperado: Código 200, "Inicio de sesión correcto." y se crea la
+                      sesión (usuario_id, usuario_nombre, usuario_correo).
+  Resultado obtenido:
+  Estado            : PENDIENTE
+
+PU-07  Contraseña incorrecta
+  Entrada           : Correo registrado y contraseña equivocada
+  Resultado esperado: Código 401 y "Correo o contraseña incorrectos."
+  Resultado obtenido:
+  Estado            : PENDIENTE
+
+================================================================================
+3. MÓDULO: REGISTRO - VALIDACIÓN EN EL NAVEGADOR (registro.js)
+================================================================================
+
+PU-08  Campos vacíos
+  Entrada           : Algún campo vacío
+  Resultado esperado: Mensaje "Completa todos los campos."
+  Resultado obtenido:
+  Estado            :
+
+PU-09  Contraseña corta
+  Entrada           : contraseña = "abc123" (6 caracteres)
+  Resultado esperado: "La contraseña debe tener al menos 8 caracteres."
+  Resultado obtenido:
+  Estado            :
+
+PU-10  Contraseñas diferentes
+  Entrada           : contraseña = "Clave1234"  confirmar = "Clave9999"
+  Resultado esperado: "Las contraseñas no coinciden."
+  Resultado obtenido:
+  Estado            :
+
+PU-11  Nombre demasiado largo
+  Entrada           : nombre de 101 caracteres
+  Resultado esperado: "El nombre no puede superar los 100 caracteres."
+  Resultado obtenido:
+  Estado            :
+
+================================================================================
+4. MÓDULO: REGISTRO - SERVIDOR (backend/usuarios/registro.php)
+================================================================================
+
+PU-12  El archivo se ejecuta sin errores
+  Entrada           : Petición GET a backend/usuarios/registro.php
+  Resultado esperado: Respuesta JSON con código 405 "Método no permitido."
+  Resultado obtenido: "Parse error: syntax error, unexpected token "`"" en la
+                      línea 155. El archivo empieza con ```php (línea 1) y
+                      termina con ``` (línea 155): son marcas de Markdown
+                      que no son código PHP.
+  Estado            : FALLIDA
+
+PU-13  Correo inválido
+  Entrada           : correo = "anacorreo.com"
+  Resultado esperado: Código 400 y "Revisa el nombre y el correo electrónico."
+  Resultado obtenido:
+  Estado            : PENDIENTE (depende de PU-12)
+
+PU-14  Correo ya registrado
+  Entrada           : Un correo que ya existe en la tabla usuarios
+  Resultado esperado: Código 409 y "Ese correo electrónico ya está registrado."
+  Resultado obtenido:
+  Estado            : PENDIENTE (depende de PU-12 y de la base de datos)
+
+PU-15  Registro correcto
+  Entrada           : nombre = "Ana", correo = "ana@correo.com",
+                      contraseña = "Clave1234"
+  Resultado esperado: Código 201 y "Cuenta creada correctamente."; la
+                      contraseña se guarda cifrada (contrasena_hash).
+  Resultado obtenido:
+  Estado            : PENDIENTE (depende de PU-12 y de la base de datos)
+
+================================================================================
+5. FUNCIONES DE PHP USADAS POR EL BACKEND
+================================================================================
+
+PU-16  Cifrado y verificación de contraseña
+  Entrada           : password_hash("Clave1234") y luego password_verify
+                      con "Clave1234" y con "otra"
+  Resultado esperado: true con "Clave1234", false con "otra"
+  Resultado obtenido: true / false
+  Estado            : APROBADA
+
+PU-17  Validación de correo
+  Entrada           : filter_var con "ana@correo.com" y "anacorreo.com"
+  Resultado esperado: Válido / Inválido
+  Resultado obtenido: Válido / Inválido
+  Estado            : APROBADA
+
+PU-18  Normalización del correo
+  Entrada           : strtolower(trim("  ANA@Correo.COM "))
+  Resultado esperado: "ana@correo.com"
+  Resultado obtenido: "ana@correo.com"
+  Estado            : APROBADA
+
+================================================================================
+6. RESUMEN
+================================================================================
+
+  Total de casos : 18
+  Aprobadas      : 4   (PU-04, PU-16, PU-17, PU-18)
+  Fallidas       : 2   (PU-05, PU-12)
+  Pendientes     : 5   (PU-06, PU-07, PU-13, PU-14, PU-15)
+  Sin ejecutar   : 7   (PU-01 a PU-03, PU-08 a PU-11: se prueban a mano
+                        en el navegador)
+
+Errores encontrados:
+  1. backend/usuarios/registro.php tiene las marcas ```php y ``` al inicio y
+     al final. Hay que borrarlas para que el registro funcione.
+  2. Falta backend/config.local.php (y ca.pem). Sin este archivo no hay
+     conexión con la base de datos.
+
+Observaciones:
+
+================================================================================
+7. EXPLICACIÓN GENERAL
+================================================================================
+
+Esta prueba sirvió para revisar, parte por parte, si las funciones principales
+de la página Custom Knits hacen lo que deben: dejar que una persona cree su
+cuenta y luego entre con su correo y su contraseña. Para cada parte se escribió
+qué datos se ingresan, qué debería pasar y qué pasó en realidad. Lo que sí
+funciona bien es la seguridad de las contraseñas: se guardan cifradas, de modo
+que nadie puede leerlas, y el sistema reconoce cuándo una contraseña es correcta
+y cuándo no. También identifica bien un correo mal escrito y no le importa si se
+escribe con mayúsculas o con espacios de más. Sin embargo, se encontraron dos
+problemas que impiden usar la página por completo. El primero es que el archivo
+encargado de crear las cuentas tiene unos símbolos sobrantes al principio y al
+final, probablemente copiados por error, y por eso no se puede registrar ningún
+usuario. El segundo es que falta el archivo que conecta la página con la base de
+datos, que es donde se guarda la información de los usuarios; sin él, la página
+no puede guardar ni consultar cuentas. Algunas pruebas quedaron pendientes porque
+dependen de que estos dos problemas se solucionen primero. Una vez corregidos, se
+podrán repetir todas las pruebas para confirmar que el registro y el inicio de
+sesión funcionan de principio a fin.
+
+================================================================================
