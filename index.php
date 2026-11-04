@@ -2,8 +2,16 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/backend/config/sesion.php';
+require_once __DIR__ . '/backend/config/csrf.php';
 
-$usuario = $_SESSION['usuario'] ?? null;
+$usuarioLogueado = isset($_SESSION['usuario']) && is_array($_SESSION['usuario']);
+
+$csrfToken = obtenerTokenCsrf();
+
+$rolUsuario = $_SESSION['rol']
+    ?? ($_SESSION['usuario']['rol'] ?? 'cliente');
+
+$esAdministrador = $usuarioLogueado && $rolUsuario === 'admin';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,56 +21,95 @@ $usuario = $_SESSION['usuario'] ?? null;
 
     <title>Custom Knits</title>
 
-    <link rel="stylesheet" href="frontend/css/estil.css">
+    <meta name="csrf-token" content="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
 
+    <link rel="stylesheet" href="frontend/css/estil.css">
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        .btn-admin {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: #222;
+            color: #fff !important;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background .2s ease;
+        }
+
+        .btn-admin:hover {
+            background: #444;
+        }
+    </style>
 </head>
 
 <body>
-
-    <header class="header">
-
-        <div class="logo">
-            <img src="img/logo.jpg" alt="Logo Custom Knits">
-            <div>
-                <h1>Custom Knits</h1>
-                <span>TEJIDOS CON AMOR</span>
-            </div>
+<header class="header">
+    <div class="logo">
+        <img src="img/logo.jpg" alt="Logo Custom Knits">
+        <div>
+            <h1>Custom Knits</h1>
+            <span>TEJIDOS CON AMOR</span>
         </div>
+    </div>
 
-        <nav class="menu">
-            <a href="#inicio" class="activo">Inicio</a>
-            <a href="#productos">Productos</a>
-            <a href="#personalizados">Personalizados</a>
-            <a href="#nosotros">Sobre nosotros</a>
-            <a href="#contacto">Contacto</a>
-        </nav>
+    <nav class="menu" id="menuPrincipal">
+        <a href="#inicio" class="activo">Inicio</a>
+        <a href="#productos">Productos</a>
+        <a href="#personalizados">Personalizados</a>
+        <a href="#nosotros">Sobre nosotros</a>
+        <a href="#contacto">Contacto</a>
 
-        <?php if ($usuario): ?>
-            <a href="backend/usuarios/logout.php" class="cerrar-sesion">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Cerrar sesión
-            </a>
+       <?php if ($usuarioLogueado): ?>
+          <a href="mis-pedidos.php">Mis pedidos</a>
+
+            <?php if ($esAdministrador): ?>
+               <a href="admin.php" class="btn-admin">
+                   <i class="fa-solid fa-gauge-high"></i>
+                    Panel de administrador
+                </a>
+            <?php endif; ?>
+
+          <a href="backend/usuarios/logout.php" class="cerrar-sesion">Cerrar sesión</a>
         <?php else: ?>
-            <a href="login.php" class="cerrar-sesion">
-                <i class="fa-regular fa-user"></i>
-                Iniciar sesión
-            </a>
+          <a href="login.php">Iniciar sesión</a>
         <?php endif; ?>
+    </nav>
 
-        <div class="iconos">
-            <div class="carrito" onclick="abrirCarrito()" role="button" tabindex="0"
-                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCarrito();}">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span id="contador">0</span>
-            </div>
+    <div class="menu-fondo" id="menuFondo"></div>
+
+    <div class="iconos">
+        <button class="icono-btn" type="button" aria-label="Buscar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button class="icono-btn" type="button" aria-label="Mi cuenta">
+            <i class="fa-regular fa-user"></i>
+        </button>
+
+        <div class="carrito"
+             onclick="abrirCarrito()"
+             role="button"
+             tabindex="0"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCarrito();}">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="contador">0</span>
         </div>
+    </div>
 
-    </header>
+    <button class="menu-toggle" id="menuToggle" type="button"
+            aria-label="Abrir menú" aria-expanded="false" aria-controls="menuPrincipal">
+        <i class="fa-solid fa-bars"></i>
+    </button>
 
 
-    <section class="hero" id="inicio">
+</header>
+
+ <section class="hero" id="inicio">
 
         <div class="hero-texto">
 
@@ -225,57 +272,50 @@ $usuario = $_SESSION['usuario'] ?? null;
             ti y hechas a tu medida.
         </p>
 
-    </section>
+   </section>
 
 
-    <footer id="contacto">
+<footer id="contacto">
+    <div class="footer-contenido">
 
-        <div class="footer-contenido">
-
-            <div class="footer-logo">
-                <img src="img/logo.jpg" alt="Logo Custom Knits">
-                <h2>Custom Knits</h2>
-                <p>TEJIDOS CON AMOR</p>
-            </div>
-
-            <div>
-                <h3>Enlaces rápidos</h3>
-                <a href="#inicio">Inicio</a>
-                <a href="#productos">Productos</a>
-                <a href="#personalizados">Personalizados</a>
-                <a href="#contacto">Contacto</a>
-            </div>
-
-            <div>
-                <h3>Contáctanos</h3>
-                <p>customknits@gmail.com</p>
-                <p>+57 3019577903</p>
-                <p>Cartagena, Bolívar</p>
-            </div>
-
-            <div>
-                <h3>Suscríbete</h3>
-                <p>Recibe nuestras novedades y ofertas especiales.</p>
-
-                <div class="suscripcion">
-                    <input
-                        type="email"
-                        placeholder="Tu correo electrónico">
-
-                    <button>Suscribirme</button>
-                </div>
-            </div>
-
+        <div class="footer-logo">
+            <img src="img/logo.jpg" alt="Logo Custom Knits">
+            <h2>Custom Knits</h2>
+            <p>TEJIDOS CON AMOR</p>
         </div>
 
-        <div class="footer-final">
-            <p>© 2026 Custom Knits. Todos los derechos reservados.</p>
+        <div>
+            <h3>Enlaces rápidos</h3>
+            <a href="#inicio">Inicio</a>
+            <a href="#productos">Productos</a>
+            <a href="#personalizados">Personalizados</a>
+            <a href="#contacto">Contacto</a>
         </div>
 
-    </footer>
+        <div>
+            <h3>Contáctanos</h3>
+            <p>customknits@gmail.com</p>
+            <p>+57 3019577903</p>
+            <p>Cartagena, Bolívar</p>
+        </div>
 
+        <div>
+            <h3>Suscríbete</h3>
+            <p>Recibe nuestras novedades y ofertas especiales.</p>
 
-    <script src="frontend/js/script.js"></script>
+            <div class="suscripcion">
+                <input type="email" placeholder="Tu correo electrónico">
+                <button>Suscribirme</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-final">
+        <p>© 2026 Custom Knits. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="frontend/js/script.js"></script>
 
 </body>
 </html>

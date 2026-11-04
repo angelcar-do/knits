@@ -2,7 +2,6 @@
 
 const CLAVE_CARRITO = "customKnitsCarrito";
 
-// Los nombres van en minúscula y deben coincidir con los que usa el catálogo.
 const PRECIOS = {
     "monedero tejido": 45000,
     "vestido tejido": 200000,
@@ -10,7 +9,6 @@ const PRECIOS = {
     "mochila tejida": 125000
 };
 
-// Imagen que se muestra en el carrito según el nombre del producto.
 const IMAGENES = {
     "monedero tejido": "img/Monedero.jpg",
     "vestido tejido": "img/Vestido.jpg",
@@ -53,15 +51,30 @@ function formatoPrecio(valor) {
     }).format(valor);
 }
 
-// Pregunta al servidor si hay un usuario con sesión iniciada.
+let tokenCsrf = "";
+
 async function haySesion() {
     try {
-        const respuesta = await fetch("backend/usuarios/estado_sesion.php", {
-            credentials: "same-origin"
-        });
+        const respuesta = await fetch(
+            "backend/usuarios/estado_sesion.php",
+            {
+                credentials: "same-origin",
+                cache: "no-store"
+            }
+        );
+
+        if (!respuesta.ok) {
+            return false;
+        }
+
         const datos = await respuesta.json();
+
+        tokenCsrf = datos.csrf_token || "";
+
         return datos.logueado === true;
+
     } catch (error) {
+        console.error("Error verificando la sesión:", error);
         return false;
     }
 }
@@ -221,7 +234,7 @@ function crearVentanaCarrito() {
         "click", cerrarVentanaCarrito
     );
 
-    // Aquí es el ÚNICO lugar donde se exige iniciar sesión: al comprar.
+
     document.getElementById("finalizarCompra")
         .addEventListener("click", async () => {
             if (carrito.length === 0) {
@@ -338,7 +351,7 @@ function renderizarCarrito() {
         const detalle = document.createElement("div");
         detalle.className = "carrito-producto-detalle";
 
-        // Imagen según el nombre del producto (ver el objeto IMAGENES arriba).
+
         const rutaImagen = IMAGENES[producto.nombre.trim().toLowerCase()];
 
         if (rutaImagen) {
@@ -600,22 +613,7 @@ async function cargarProductosDesdeMongoDB() {
             boton.innerHTML =
                 '<i class="fa-solid fa-cart-shopping"></i> Agregar al carrito';
 
-            boton.addEventListener("click", async () => {
-
-                if (!(await haySesion())) {
-
-                    const irALogin = confirm(
-                        "Inicia sesión para agregar productos al carrito.\n\n" +
-                        "¿Quieres ir a iniciar sesión ahora?"
-                    );
-
-                    if (irALogin) {
-                        window.location.href = "login.php?redirect=index.php";
-                    }
-
-                    return;
-                }
-
+            boton.addEventListener("click", () => {
                 agregarCarrito(producto.nombre, Number(producto.precio));
             });
 
@@ -632,3 +630,126 @@ async function cargarProductosDesdeMongoDB() {
 }
 
 document.addEventListener("DOMContentLoaded", cargarProductosDesdeMongoDB);
+
+
+/* ==========================================
+   MENÚ HAMBURGUESA — CUSTOM KNITS
+   ========================================== */
+
+const menuToggle = document.getElementById("menuToggle");
+const menuPrincipal = document.getElementById("menuPrincipal");
+const menuFondo = document.getElementById("menuFondo");
+
+if (menuToggle && menuPrincipal) {
+
+    const iconoMenu = menuToggle.querySelector("i");
+    let ultimoElementoEnfocado = null;
+
+    const estaEnMovil = () => window.innerWidth <= 1100;
+
+    function actualizarIcono(abierto) {
+        if (iconoMenu) {
+            iconoMenu.className = abierto
+                ? "fa-solid fa-xmark"
+                : "fa-solid fa-bars";
+        }
+
+        menuToggle.setAttribute(
+            "aria-label",
+            abierto ? "Cerrar menú" : "Abrir menú"
+        );
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            String(abierto)
+        );
+    }
+
+    function abrirMenu() {
+        if (!estaEnMovil()) return;
+
+        ultimoElementoEnfocado = document.activeElement;
+
+        menuPrincipal.classList.add("abierto");
+        document.body.classList.add("menu-abierto");
+
+        actualizarIcono(true);
+
+        if (menuFondo) {
+            menuFondo.setAttribute("aria-hidden", "false");
+        }
+
+        const primerEnlace = menuPrincipal.querySelector("a");
+
+        if (primerEnlace) {
+            primerEnlace.focus();
+        }
+    }
+
+    function cerrarMenu() {
+        menuPrincipal.classList.remove("abierto");
+        document.body.classList.remove("menu-abierto");
+
+        actualizarIcono(false);
+
+        if (menuFondo) {
+            menuFondo.setAttribute("aria-hidden", "true");
+        }
+
+        if (
+            ultimoElementoEnfocado &&
+            typeof ultimoElementoEnfocado.focus === "function"
+        ) {
+            ultimoElementoEnfocado.focus();
+        }
+    }
+
+    menuToggle.addEventListener("click", () => {
+        const abierto = menuPrincipal.classList.contains("abierto");
+
+        if (abierto) {
+            cerrarMenu();
+        } else {
+            abrirMenu();
+        }
+    });
+
+    // Cerrar al seleccionar una opción
+    menuPrincipal.querySelectorAll("a").forEach(enlace => {
+        enlace.addEventListener("click", () => {
+            if (estaEnMovil()) {
+                cerrarMenu();
+            }
+        });
+    });
+
+    // Cerrar al tocar el fondo
+    if (menuFondo) {
+        menuFondo.addEventListener("click", cerrarMenu);
+    }
+
+    // Cerrar con Escape
+    document.addEventListener("keydown", evento => {
+        if (
+            evento.key === "Escape" &&
+            menuPrincipal.classList.contains("abierto")
+        ) {
+            cerrarMenu();
+            menuToggle.focus();
+        }
+    });
+
+    // Cerrar al volver a escritorio
+    window.addEventListener("resize", () => {
+        if (!estaEnMovil()) {
+            cerrarMenu();
+        }
+    });
+
+    // Estado inicial
+    actualizarIcono(false);
+
+    if (menuFondo) {
+        menuFondo.setAttribute("aria-hidden", "true");
+    }
+}

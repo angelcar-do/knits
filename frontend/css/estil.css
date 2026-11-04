@@ -1392,7 +1392,7 @@ footer a:hover {
 }
 
 .boton-secundario i {
-    font-size: px;
+    font-size: 1em;
     transition: transform 0.3s ease;
 }
 
@@ -1500,3 +1500,447 @@ footer a:hover {
     gap: 16px;
 }
 
+
+.header {
+    justify-content: space-between;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.menu-fondo {
+    display: none;
+}
+
+.iconos {
+    display: flex;
+    align-items: center;
+    gap: clamp(0px, 1vw, 8px);
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Computador: una sola línea */
+@media (min-width: 1101px) {
+    .header {
+        flex-wrap: nowrap;
+        gap: clamp(6px, 1vw, 16px);
+        padding: 10px 2%;
+    }
+
+.logo { min-width: 0; gap: 14px; }
+.logo img { width: auto; height: clamp(48px, 5vw, 72px); }
+.logo h1 {
+    font-size: clamp(24px, 2.6vw, 36px);
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+.logo span {
+    font-size: clamp(8px, 0.85vw, 11px);
+    letter-spacing: clamp(3px, 0.5vw, 7px);
+    white-space: nowrap;
+}
+
+    .menu {
+        flex: 1 1 auto;
+        min-width: 0;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: clamp(0px, 0.3vw, 4px);
+    }
+
+    .menu a {
+        padding: clamp(4px, 0.6vw, 8px) clamp(4px, 0.7vw, 10px);
+        font-size: clamp(9px, 1vw, 12px);
+    }
+
+   .menu .btn-admin,
+.menu .cerrar-sesion {
+    padding: clamp(4px, 0.6vw, 8px) clamp(6px, 0.9vw, 12px);
+    font-size: clamp(9px, 1vw, 12px);
+    gap: 5px;
+    color: #fff;
+    white-space: nowrap;
+}
+}
+
+/* Tablet y celular: menú hamburguesa */
+@media (max-width: 1100px) {
+    .header {
+        flex-wrap: wrap;
+        padding: 10px 4%;
+        gap: 10px;
+    }
+
+    .logo { order: 1; flex: 1 1 auto; min-width: 0; }
+    .logo img { width: auto; height: 44px; }
+    .logo h1 { font-size: 20px; }
+    .logo span { font-size: 8px; letter-spacing: 2px; }
+
+    .iconos { order: 2; margin-left: auto; }
+
+    .menu-toggle {
+        order: 3;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: var(--color-lila-claro);
+        color: var(--color-morado);
+        border-radius: 12px;
+        font-size: 18px;
+        position: relative;
+        z-index: 1200;
+    }
+
+    .menu-toggle:hover {
+        background: var(--color-morado);
+        color: #fff;
+    }
+
+    .menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: min(320px, 85vw);
+        z-index: 1100;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        gap: 4px;
+        padding: 80px 16px 24px;
+        background: #fff;
+        box-shadow: -8px 0 30px rgba(48, 36, 58, 0.25);
+        overflow-y: auto;
+        transform: translateX(100%);
+        visibility: hidden;
+        transition: transform 0.3s ease, visibility 0.3s ease;
+    }
+
+    .menu.abierto {
+        transform: translateX(0);
+        visibility: visible;
+    }
+
+    .menu a {
+        padding: 12px 14px;
+        font-size: 14px;
+        text-align: left;
+        border-radius: 12px;
+    }
+
+    .menu .btn-admin,
+    .menu .cerrar-sesion {
+        justify-content: center;
+        text-align: center;
+        margin-top: 4px;
+        color: #fff;
+    }
+
+    .menu-fondo {
+        position: fixed;
+        inset: 0;
+        z-index: 1050;
+        background: rgba(48, 36, 58, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .menu.abierto ~ .menu-fondo {
+       opacity: 1;
+       visibility: visible;
+    }
+}
+
+/* ===== ICONOS RESPONSIVE ===== */
+:root {
+    --icono-header: clamp(16px, 4.5vw, 20px);
+    --area-toque: 40px;
+}
+
+i[class*="fa-"] {
+    line-height: 1;
+}
+
+.iconos > i,
+.iconos .icono-btn,
+.carrito {
+    width: var(--area-toque);
+    height: var(--area-toque);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--icono-header);
+    color: var(--color-verde);
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.iconos > i:hover,
+.iconos .icono-btn:hover,
+.carrito:hover {
+    color: var(--color-principal);
+    background: var(--color-crema);
+}
+
+.categoria i {
+    width: clamp(52px, 14vw, 65px);
+    height: clamp(52px, 14vw, 65px);
+    font-size: clamp(19px, 5vw, 23px);
+}
+
+.favorito {
+    width: clamp(36px, 9vw, 40px);
+    height: clamp(36px, 9vw, 40px);
+    font-size: clamp(14px, 4vw, 16px);
+}
+
+button i,
+.menu a i {
+    font-size: 1em;
+}
+
+@media (max-width: 360px) {
+    :root { --area-toque: 38px; }
+    .iconos { gap: 0; }
+}
+
+
+/* ==========================================
+   CUSTOM KNITS — MENÚ EXCLUSIVO BOUTIQUE
+   ========================================== */
+
+@media (max-width: 1100px) {
+
+    /* Botón hamburguesa */
+    .menu-toggle {
+        width: 44px;
+        height: 44px;
+        border: 1px solid #eadcf5;
+        border-radius: 14px;
+        background: #f5effa;
+        color: #6A0DAD;
+        font-size: 19px;
+        box-shadow: 0 4px 12px rgba(106, 13, 173, .08);
+        transition: all .25s ease;
+        z-index: 1201;
+    }
+
+    .menu-toggle:hover,
+    .menu-toggle[aria-expanded="true"] {
+        background: #6A0DAD;
+        color: #fff;
+        transform: scale(1.04);
+    }
+
+    /* Fondo oscuro */
+    .menu-fondo {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 1090;
+        background: rgba(35, 20, 45, .48);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .35s ease, visibility .35s ease;
+    }
+
+    .menu.abierto ~ .menu-fondo {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    /* Panel lateral */
+    .header .menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: min(390px, 88vw);
+        height: 100dvh;
+        padding: 0 22px 30px;
+        z-index: 1100;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 7px;
+
+        overflow-y: auto;
+        overscroll-behavior: contain;
+
+        background: linear-gradient(
+            160deg,
+            #ffffff 0%,
+            #fcf9ff 65%,
+            #f5edf9 100%
+        );
+
+        border-left: 1px solid #eadcf5;
+        border-radius: 24px 0 0 24px;
+        box-shadow: -15px 0 55px rgba(42, 20, 55, .18);
+
+        transform: translateX(105%);
+        visibility: hidden;
+        transition:
+            transform .4s cubic-bezier(.22, 1, .36, 1),
+            visibility .4s ease;
+    }
+
+    .header .menu.abierto {
+        transform: translateX(0);
+        visibility: visible;
+    }
+
+    /* Cabecera decorativa */
+    .header .menu::before {
+        content: "CUSTOM KNITS";
+        display: block;
+        padding: 35px 0 8px;
+        margin-bottom: 4px;
+
+        color: #6A0DAD;
+        font-family: "DM Serif Display", serif;
+        font-size: 29px;
+        letter-spacing: 1px;
+        line-height: 1.2;
+    }
+
+    .header .menu::after {
+        content: "Detalles hechos con amor, especialmente para ti.";
+        display: block;
+        order: 20;
+        margin-top: auto;
+        padding: 24px 8px 0;
+        color: #8d7c99;
+        font-size: 10px;
+        line-height: 1.7;
+        letter-spacing: .4px;
+        text-align: center;
+        border-top: 1px solid #eadcf5;
+    }
+
+    /* Enlaces */
+    .header .menu a {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        width: 100%;
+        min-height: 49px;
+        padding: 13px 15px;
+
+        color: #44334f;
+        background: rgba(255,255,255,.75);
+        border: 1px solid transparent;
+        border-radius: 13px;
+
+        font-size: 13px;
+        font-weight: 600;
+        text-align: left;
+        text-decoration: none;
+
+        transition: all .25s ease;
+        animation: menuEntrada .4s ease both;
+    }
+
+    .header .menu a::after {
+        display: none;
+    }
+
+    .header .menu a:hover {
+        color: #6A0DAD;
+        background: #f1e7fa;
+        border-color: #e3d0f2;
+        transform: translateX(4px);
+    }
+
+    .header .menu a.activo {
+        color: #6A0DAD;
+        background: #f0e5fa;
+        border-color: #dfc8f0;
+    }
+
+    /* Opciones especiales */
+    .header .menu .btn-admin {
+        margin-top: 10px;
+        justify-content: center;
+        color: #fff;
+        background: linear-gradient(135deg, #6A0DAD, #8d42c4);
+        border: none;
+        box-shadow: 0 6px 15px rgba(106, 13, 173, .2);
+    }
+
+    .header .menu .btn-admin:hover {
+        color: #fff;
+        background: #4f0a82;
+    }
+
+    .header .menu .cerrar-sesion {
+        justify-content: center;
+        margin-top: 3px;
+        color: #9b3d53;
+        background: #fff3f5;
+        border: 1px solid #f2dce2;
+    }
+
+    .header .menu .cerrar-sesion:hover {
+        color: #fff;
+        background: #a83f59;
+    }
+
+    /* Animación de entrada */
+    @keyframes menuEntrada {
+        from {
+            opacity: 0;
+            transform: translateX(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Evita desplazamiento del fondo */
+    body.menu-abierto {
+        overflow: hidden;
+        touch-action: none;
+    }
+}
+
+/* Celulares pequeños */
+@media (max-width: 380px) {
+    .header .menu {
+        width: 90vw;
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+    .header .menu::before {
+        font-size: 25px;
+    }
+}
+
+/* Accesibilidad: reducir animaciones */
+@media (prefers-reduced-motion: reduce) {
+    .header .menu,
+    .header .menu a,
+    .menu-fondo,
+    .menu-toggle {
+        animation: none !important;
+        transition: none !important;
+    }
+}
