@@ -19,6 +19,7 @@ try {
         ['activo' => true],
         [
             'projection' => [
+                'codigo' => 1,
                 'nombre' => 1,
                 'descripcion' => 1,
                 'precio' => 1,
@@ -33,6 +34,7 @@ try {
 
     foreach ($cursor as $producto) {
         $productos[] = [
+            'codigo' => $producto['codigo'] ?? '',
             'nombre' => $producto['nombre'] ?? '',
             'descripcion' => $producto['descripcion'] ?? '',
             'precio' => $producto['precio'] ?? 0,

@@ -9,6 +9,12 @@ const PRECIOS = {
     "gorro tejido": 25000,
     "mochila tejido": 125000
 };
+const IMAGENES = {
+    "monedero tejido": "img/Monedero.jpg",
+    "vestido tejido": "img/Vestido.jpg",
+    "gorro tejido": "img/Gorro.jpg",
+    "mochila tejida": "img/Mochila.jpg"
+};
 
 let carrito = cargarCarrito();
 
@@ -78,7 +84,7 @@ function actualizarContador() {
     }
 }
 
-function agregarCarrito(producto, precio) {
+function agregarCarrito(producto, precio, codigoProducto = null) {
     if (typeof producto !== "string" || !producto.trim()) {
         alert("No se pudo identificar el producto.");
         return;
@@ -108,7 +114,7 @@ function agregarCarrito(producto, precio) {
     "mochila tejido": "mochila-tejida"
 };
 
-const codigo = CODIGOS_PRODUCTOS[clave];
+const codigo = codigoProducto || CODIGOS_PRODUCTOS[clave];
 
 if (!codigo) {
     alert("No se pudo identificar el código del producto.");
@@ -174,100 +180,90 @@ function crearVentanaCarrito() {
     const ventana = document.createElement("div");
     ventana.id = "ventanaCarrito";
 
-    Object.assign(ventana.style, {
-        display: "none",
-        position: "fixed",
-        inset: "0",
-        zIndex: "10000",
-        background: "rgba(0,0,0,0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "16px"
-    });
-
     ventana.innerHTML = `
-        <div role="dialog" aria-modal="true"
-             aria-labelledby="tituloCarrito"
-             style="background:#fffaf7; color:#493631;
-             padding:24px; border-radius:14px; width:100%;
-             max-width:650px; max-height:85vh; overflow:auto;
-             box-sizing:border-box; font-family:Arial,sans-serif;">
+        <div class="carrito-panel"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="tituloCarrito">
 
-            <div style="display:flex; justify-content:space-between;
-                 align-items:center; gap:12px;">
-                <h2 id="tituloCarrito" style="margin:0;">
-                    <i class="fa-solid fa-cart-shopping"></i>
+            <div class="carrito-encabezado">
+                <h2 id="tituloCarrito" class="carrito-titulo">
+                    <span class="carrito-icono-titulo">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </span>
                     Tu carrito
                 </h2>
+
                 <button id="cerrarCarrito" type="button"
-                    aria-label="Cerrar carrito"
-                    style="border:0; background:none; font-size:26px;
-                    cursor:pointer; color:#694b45;">&times;</button>
+                        aria-label="Cerrar carrito">&times;</button>
             </div>
 
-            <div id="listaCarrito" style="margin-top:20px;"></div>
+            <div id="listaCarrito"></div>
 
-            <div id="totalCarrito"
-                 style="font-size:20px; font-weight:bold;
-                 text-align:right; margin-top:20px;"></div>
+            <div class="carrito-resumen">
+                <div class="carrito-resumen-linea">
+                    <span>Resumen de tu compra</span>
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <div id="totalCarrito">Total: $0</div>
+            </div>
 
-            <div style="display:flex; gap:10px; flex-wrap:wrap;
-                 justify-content:flex-end; margin-top:20px;">
-                <button id="vaciarCarrito" type="button"
-                    style="border:1px solid #694b45; color:#694b45;
-                    background:transparent; padding:11px 16px;
-                    border-radius:8px; cursor:pointer;">
+            <div class="carrito-acciones">
+                <button id="vaciarCarrito"
+                        class="carrito-boton carrito-boton-vaciar"
+                        type="button">
+                    <i class="fa-regular fa-trash-can"></i>
                     Vaciar carrito
                 </button>
-                <button id="seguirComprando" type="button"
-                    style="border:0; color:white; background:#694b45;
-                    padding:11px 16px; border-radius:8px;
-                    cursor:pointer;">
+
+                <button id="seguirComprando"
+                        class="carrito-boton carrito-boton-seguir"
+                        type="button">
                     Seguir comprando
                 </button>
-                <button id="finalizarCompra" type="button"
-    style="border:0; color:white; background:#80634f;
-    padding:11px 16px; border-radius:8px;
-    cursor:pointer;">
-    Finalizar compra
-</button>
+
+                <button id="finalizarCompra"
+                        class="carrito-boton carrito-boton-seguir"
+                        type="button">
+                    Finalizar compra
+                    <i class="fa-solid fa-credit-card"></i>
+                </button>
             </div>
         </div>
     `;
 
     document.body.appendChild(ventana);
 
-    document.getElementById("cerrarCarrito").addEventListener(
-        "click", cerrarVentanaCarrito
-    );
+    document.getElementById("cerrarCarrito")
+        .addEventListener("click", cerrarVentanaCarrito);
 
-    document.getElementById("seguirComprando").addEventListener(
-        "click", cerrarVentanaCarrito
-    );
-    document.getElementById("finalizarCompra").addEventListener(
-    "click", finalizarCompra
-);
+    document.getElementById("seguirComprando")
+        .addEventListener("click", cerrarVentanaCarrito);
+
+    document.getElementById("finalizarCompra")
+        .addEventListener("click", finalizarCompra);
 
     ventana.addEventListener("click", evento => {
         if (evento.target === ventana) cerrarVentanaCarrito();
     });
 
-    document.getElementById("vaciarCarrito").addEventListener("click", () => {
-        if (carrito.length === 0) {
-            alert("Tu carrito ya está vacío.");
-            return;
-        }
+    document.getElementById("vaciarCarrito")
+        .addEventListener("click", () => {
+            if (carrito.length === 0) {
+                alert("Tu carrito ya está vacío.");
+                return;
+            }
 
-        if (confirm("¿Seguro que deseas vaciar el carrito?")) {
-            carrito = [];
-            guardarCarrito();
-            actualizarContador();
-            renderizarCarrito();
-        }
-    });
+            if (confirm("¿Seguro que deseas vaciar el carrito?")) {
+                carrito = [];
+                guardarCarrito();
+                actualizarContador();
+                renderizarCarrito();
+            }
+        });
 
-    document.getElementById("listaCarrito").addEventListener(
-        "click", evento => {
+    document.getElementById("listaCarrito")
+        .addEventListener("click", evento => {
             const boton = evento.target.closest("button[data-accion]");
             if (!boton) return;
 
@@ -291,10 +287,8 @@ function crearVentanaCarrito() {
             guardarCarrito();
             actualizarContador();
             renderizarCarrito();
-        }
-    );
+        });
 }
-
 function cerrarVentanaCarrito() {
     const ventana = document.getElementById("ventanaCarrito");
     if (ventana) ventana.style.display = "none";
@@ -314,87 +308,105 @@ function renderizarCarrito() {
     if (!lista || !totalElemento) return;
 
     if (carrito.length === 0) {
-        lista.textContent = "Tu carrito está vacío. ¡Agrega tus productos favoritos!";
+        lista.innerHTML = `
+            <div class="carrito-vacio">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <strong>Tu carrito está vacío</strong>
+                ¡Agrega tus tejidos favoritos y vuelve aquí!
+            </div>
+        `;
+
         totalElemento.textContent = "Total: " + formatoPrecio(0);
         return;
     }
 
-    lista.innerHTML = "";
+    lista.replaceChildren();
 
     carrito.forEach((producto, indice) => {
         const fila = document.createElement("div");
+        fila.className = "carrito-producto";
 
-        Object.assign(fila.style, {
-            display: "grid",
-            gridTemplateColumns: "minmax(0,1fr) auto",
-            gap: "12px",
-            padding: "15px 0",
-            borderBottom: "1px solid #eadbd6"
-        });
+        const detalle = document.createElement("div");
+        detalle.className = "carrito-producto-detalle";
+
+        const rutaImagen = IMAGENES[
+            producto.nombre.trim().toLowerCase()
+        ];
+
+        if (rutaImagen) {
+            const imagen = document.createElement("img");
+            imagen.className = "carrito-producto-imagen";
+            imagen.src = rutaImagen;
+            imagen.alt = producto.nombre;
+            detalle.appendChild(imagen);
+        }
 
         const informacion = document.createElement("div");
+        informacion.className = "carrito-producto-info";
+
         const nombre = document.createElement("strong");
+        nombre.className = "carrito-producto-nombre";
         nombre.textContent = producto.nombre;
 
         const precio = document.createElement("p");
-        precio.style.margin = "6px 0";
-        precio.textContent = formatoPrecio(producto.precio) + " por unidad";
+        precio.className = "carrito-producto-precio";
+        precio.textContent =
+            formatoPrecio(producto.precio) + " por unidad";
 
         const subtotal = document.createElement("p");
-        subtotal.style.margin = "6px 0";
+        subtotal.className = "carrito-producto-subtotal";
         subtotal.textContent =
-            "Subtotal: " + formatoPrecio(producto.precio * producto.cantidad);
+            "Subtotal: " +
+            formatoPrecio(producto.precio * producto.cantidad);
 
         informacion.append(nombre, precio, subtotal);
+        detalle.appendChild(informacion);
 
         const controles = document.createElement("div");
-        controles.style.textAlign = "right";
+        controles.className = "carrito-producto-controles";
 
-        const cantidad = document.createElement("p");
-        cantidad.textContent = "Cantidad: " + producto.cantidad;
+        const cantidad = document.createElement("div");
+        cantidad.className = "carrito-cantidad";
 
-        const botones = document.createElement("div");
-        botones.style.display = "flex";
-        botones.style.gap = "5px";
-        botones.style.flexWrap = "wrap";
-        botones.style.justifyContent = "flex-end";
+        const botonRestar = document.createElement("button");
+        botonRestar.type = "button";
+        botonRestar.textContent = "−";
+        botonRestar.dataset.accion = "restar";
+        botonRestar.dataset.indice = indice;
+        botonRestar.setAttribute("aria-label", "Restar cantidad");
 
-        [
-            ["−", "restar"],
-            ["+", "sumar"],
-            ["Eliminar", "eliminar"]
-        ].forEach(([texto, accion]) => {
-            const boton = document.createElement("button");
-            boton.type = "button";
-            boton.textContent = texto;
-            boton.dataset.accion = accion;
-            boton.dataset.indice = indice;
+        const numero = document.createElement("span");
+        numero.textContent = producto.cantidad;
 
-            Object.assign(boton.style, {
-                border: "1px solid #d8b8ae",
-                borderRadius: "6px",
-                background: "#f4e7e1",
-                color: "#493631",
-                padding: "7px 10px",
-                cursor: "pointer"
-            });
+        const botonSumar = document.createElement("button");
+        botonSumar.type = "button";
+        botonSumar.textContent = "+";
+        botonSumar.dataset.accion = "sumar";
+        botonSumar.dataset.indice = indice;
+        botonSumar.setAttribute("aria-label", "Sumar cantidad");
 
-            botones.appendChild(boton);
-        });
+        cantidad.append(botonRestar, numero, botonSumar);
 
-        controles.append(cantidad, botones);
-        fila.append(informacion, controles);
+        const eliminar = document.createElement("button");
+        eliminar.type = "button";
+        eliminar.className = "carrito-eliminar";
+        eliminar.textContent = "Eliminar";
+        eliminar.dataset.accion = "eliminar";
+        eliminar.dataset.indice = indice;
+
+        controles.append(cantidad, eliminar);
+        fila.append(detalle, controles);
         lista.appendChild(fila);
     });
 
     const total = carrito.reduce(
-        (suma, producto) => suma + producto.precio * producto.cantidad,
+        (suma, producto) =>
+            suma + producto.precio * producto.cantidad,
         0
     );
 
     totalElemento.textContent = "Total: " + formatoPrecio(total);
 }
-
 function obtenerCarrito() {
     return carrito.map(producto => ({ ...producto }));
 }
@@ -644,7 +656,11 @@ async function cargarProductosDesdeMongoDB() {
                 '<i class="fa-solid fa-cart-shopping"></i> Agregar al carrito';
 
             boton.addEventListener("click", () => {
-                agregarCarrito(producto.nombre, Number(producto.precio));
+                agregarCarrito(
+                    producto.nombre,
+                    Number(producto.precio),
+                    producto.codigo
+                );
             });
 
             informacion.append(nombre, precio, boton);
