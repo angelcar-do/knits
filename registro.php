@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,15 +9,15 @@
 
     <meta name="description" content="Crea tu cuenta en Custom Knits y descubre prendas hechas para ti.">
 
-    <link rel="stylesheet" href="registro.css">
-    <script src="registro.js" defer></script>
+      <link rel="stylesheet" href="frontend/css/registro.css?v=2">
+    <script src="frontend/js/registro.js" defer></script>
 </head>
 
 <body>
     <main class="registro-contenedor">
 
         <a class="volver" href="index.php">
-            ← Volver a la tienda
+            Volver a la tienda
         </a>
 
         <section class="registro-tarjeta">
@@ -29,7 +29,7 @@
             <h1>Crea tu cuenta</h1>
 
             <p class="descripcion">
-                Regístrate y descubre prendas hechas para ti.
+                Registrate y descubre prendas hechas para ti.
             </p>
 
             <form id="formRegistro" autocomplete="on">
@@ -92,15 +92,16 @@
 
             <p class="enlace-login">
                 ¿Ya tienes una cuenta?
-                <a href="login.php">Inicia sesión</a>
+                <a href="login.php">Inicia Sesión</a>
             </p>
 
         </section>
 
         <footer>
-            © 2026 Custom Knits · Diseñado para ti
+            Â© 2026 Custom Knits Diseñado para ti
         </footer>
 
     </main>
 </body>
 </html>
+

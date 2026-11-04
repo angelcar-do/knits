@@ -12,22 +12,44 @@ const PRECIOS = {
 
 let carrito = cargarCarrito();
 
+
 function cargarCarrito() {
     try {
-        const datos = JSON.parse(localStorage.getItem(CLAVE_CARRITO) || "[]");
+        const datos = JSON.parse(
+            localStorage.getItem(CLAVE_CARRITO) || "[]"
+        );
+
         if (!Array.isArray(datos)) return [];
 
-        return datos.filter(p =>
-            p &&
-            typeof p.nombre === "string" &&
-            Number.isFinite(p.precio) &&
-            Number.isInteger(p.cantidad) &&
-            p.cantidad > 0
-        );
+        const CODIGOS_PRODUCTOS = {
+            "monedero tejido": "monedero-tejido",
+            "vestido tejido": "vestido-tejido",
+            "gorro tejido": "gorro-tejido",
+            "mochila tejida": "mochila-tejida",
+            "mochila tejido": "mochila-tejida"
+        };
+
+        return datos
+            .filter(p =>
+                p &&
+                typeof p.nombre === "string" &&
+                Number.isFinite(p.precio) &&
+                Number.isInteger(p.cantidad) &&
+                p.cantidad > 0
+            )
+            .map(p => ({
+                ...p,
+                codigo: CODIGOS_PRODUCTOS[
+                    p.nombre.trim().toLowerCase()
+                ] || p.codigo
+            }))
+            .filter(p => typeof p.codigo === "string");
     } catch (error) {
+        console.error("Error cargando el carrito:", error);
         return [];
     }
 }
+
 
 function guardarCarrito() {
     try {
@@ -56,7 +78,7 @@ function actualizarContador() {
     }
 }
 
-function agregarCarrito(producto, precio) {
+function agregarCarrito(producto, precio, codigoProducto = null) {
     if (typeof producto !== "string" || !producto.trim()) {
         alert("No se pudo identificar el producto.");
         return;
@@ -78,15 +100,34 @@ function agregarCarrito(producto, precio) {
         p => p.nombre.toLowerCase() === clave
     );
 
-    if (existente) {
-        existente.cantidad++;
-    } else {
-        carrito.push({
-            nombre: nombre,
-            precio: precioFinal,
-            cantidad: 1
-        });
-    }
+  const CODIGOS_PRODUCTOS = {
+    "monedero tejido": "monedero-tejido",
+    "vestido tejido": "vestido-tejido",
+    "gorro tejido": "gorro-tejido",
+    "mochila tejida": "mochila-tejida",
+    "mochila tejido": "mochila-tejida"
+};
+
+const codigo = codigoProducto || CODIGOS_PRODUCTOS[clave];
+
+if (!codigo) {
+    alert("No se pudo identificar el código del producto.");
+    return;
+}
+
+
+if (existente) {
+    existente.codigo = codigo;
+    existente.cantidad++;
+} else {
+    carrito.push({
+        codigo: codigo,
+        nombre: nombre,
+        precio: precioFinal,
+        cantidad: 1
+    });
+}
+
 
     guardarCarrito();
     actualizarContador();
@@ -94,7 +135,6 @@ function agregarCarrito(producto, precio) {
     mostrarAviso(nombre + " agregado al carrito");
 }
 
-// Aviso visual
 function mostrarAviso(texto) {
     let aviso = document.getElementById("avisoCarrito");
 
@@ -185,6 +225,12 @@ function crearVentanaCarrito() {
                     cursor:pointer;">
                     Seguir comprando
                 </button>
+                <button id="finalizarCompra" type="button"
+    style="border:0; color:white; background:#80634f;
+    padding:11px 16px; border-radius:8px;
+    cursor:pointer;">
+    Finalizar compra
+</button>
             </div>
         </div>
     `;
@@ -198,6 +244,9 @@ function crearVentanaCarrito() {
     document.getElementById("seguirComprando").addEventListener(
         "click", cerrarVentanaCarrito
     );
+    document.getElementById("finalizarCompra").addEventListener(
+    "click", finalizarCompra
+);
 
     ventana.addEventListener("click", evento => {
         if (evento.target === ventana) cerrarVentanaCarrito();
@@ -357,6 +406,66 @@ function calcularTotalCarrito() {
     );
 }
 
+async function finalizarCompra() {
+    if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+    }
+
+    const confirmar = confirm(
+        "¿Deseas registrar el pedido por " +
+        formatoPrecio(calcularTotalCarrito()) + "?"
+    );
+
+    if (!confirmar) return;
+
+    try {
+   const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    ?.getAttribute("content");
+
+if (!csrfToken) {
+    alert("No se pudo validar la seguridad. Recarga la página.");
+    return;
+}
+
+const respuesta = await fetch("backend/pedidos/crear.php", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+    },
+    body: JSON.stringify({
+        productos: carrito.map(producto => ({
+            codigo: producto.codigo,
+            cantidad: producto.cantidad
+        }))
+    })
+});
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok || !datos.ok) {
+            alert(datos.mensaje || "No se pudo registrar el pedido.");
+            return;
+        }
+
+        alert(
+            "¡Pedido registrado correctamente!\n" +
+            "Número: " + datos.pedido_id + "\n" +
+            "Total: " + formatoPrecio(datos.total)
+        );
+
+        vaciarCarrito();
+        cerrarVentanaCarrito();
+
+    } catch (error) {
+        console.error("Error registrando el pedido:", error);
+        alert("No se pudo conectar con el servidor. Inténtalo de nuevo.");
+    }
+}
+
 function vaciarCarrito() {
     carrito = [];
     guardarCarrito();
@@ -382,7 +491,6 @@ function solicitarPersonalizado() {
     );
 }
 
-    alert("Próximamente podrás realizar tu pedido personalizado.");
 
 document.addEventListener("DOMContentLoaded", () => {
     const slides = document.querySelectorAll(
@@ -472,3 +580,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mostrarSlide(0);
 });
+
+async function cargarProductosDesdeMongoDB() {
+    const contenedor = document.getElementById("productosGrid");
+
+    if (!contenedor) return;
+
+    try {
+        const respuesta = await fetch("backend/productos/listar.php");
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudieron consultar los productos.");
+        }
+
+        const datos = await respuesta.json();
+
+        if (!datos.ok || !Array.isArray(datos.productos)) {
+            throw new Error("La respuesta del catálogo no es válida.");
+        }
+
+        if (datos.productos.length === 0) {
+            contenedor.textContent = "Todavía no hay productos disponibles.";
+            return;
+        }
+
+        contenedor.replaceChildren();
+
+        datos.productos.forEach(producto => {
+            const tarjeta = document.createElement("article");
+            tarjeta.className = "producto";
+
+            const imagenContenedor = document.createElement("div");
+            imagenContenedor.className = "imagen-producto";
+
+            const imagen = document.createElement("img");
+            imagen.src = producto.imagen;
+            imagen.alt = producto.nombre;
+
+            const favorito = document.createElement("button");
+            favorito.className = "favorito";
+            favorito.type = "button";
+            favorito.setAttribute("aria-label", "Marcar como favorito");
+
+            const corazon = document.createElement("i");
+            corazon.className = "fa-regular fa-heart";
+            favorito.appendChild(corazon);
+
+            imagenContenedor.append(imagen, favorito);
+
+            const informacion = document.createElement("div");
+            informacion.className = "info-producto";
+
+            const nombre = document.createElement("h3");
+            nombre.textContent = producto.nombre;
+
+            const precio = document.createElement("p");
+            precio.className = "precio";
+            precio.textContent = formatoPrecio(Number(producto.precio));
+
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.innerHTML =
+                '<i class="fa-solid fa-cart-shopping"></i> Agregar al carrito';
+
+            boton.addEventListener("click", () => {
+                agregarCarrito(
+                    producto.nombre,
+                    Number(producto.precio),
+                    producto.codigo
+                );
+            });
+
+            informacion.append(nombre, precio, boton);
+            tarjeta.append(imagenContenedor, informacion);
+            contenedor.appendChild(tarjeta);
+        });
+
+    } catch (error) {
+        console.error("Error cargando el catálogo:", error);
+        contenedor.textContent =
+            "No pudimos cargar los productos. Recarga la página para intentarlo de nuevo.";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", cargarProductosDesdeMongoDB);

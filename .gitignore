@@ -5,3 +5,15 @@
 /.env
 /.env.*
 !/.env.example
+
+# Configuracion privada de MongoDB
+/config.mongodb.php
+
+# Dependencias instaladas por Composer
+/vendor/
+
+# Respaldos locales de migracion
+/respaldo_migracion_20261016_144146/
+
+# Copias de seguridad locales
+*.php.backup
